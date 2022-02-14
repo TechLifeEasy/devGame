@@ -6,7 +6,7 @@ require("dotenv").config()
 var cors = require('cors')
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
-const port = process.env.PROT || 5000;
+// const port = process.env.PROT || 8080;
 const db = require("./db/connections/DataBaseConnection");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
@@ -47,7 +47,7 @@ if (process.env.NODE_ENV === 'production') {
   });
 } else {
 
-  const port = process.env.PROT || 3000;
+  const port = process.env.PROT || 8080;
 
   app.listen(port, () => {
     console.log(`Server app listening at http://localhost:${port}`)
