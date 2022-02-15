@@ -1,7 +1,15 @@
-import '../styles/globals.css'
+import "../styles/globals.css";
+import Pop from '../components/helper/Pop'
 
 function MyApp({ Component, pageProps }) {
-  return <Component {...pageProps} />
+  return (
+    <div>
+     
+      <Component {...pageProps} />
+
+      <Pop text="zeel is best"></Pop>
+    </div>
+  );
 }
 
-export default MyApp
+export default MyApp;
