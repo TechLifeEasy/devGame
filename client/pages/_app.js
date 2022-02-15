@@ -1,13 +1,24 @@
 import "../styles/globals.css";
 import Pop from '../components/helper/Pop'
+import {useState} from 'react';
 
 function MyApp({ Component, pageProps }) {
+
+ 
+  const [popText,setPop]=useState(false);
+
+  
   return (
     <div>
      
       <Component {...pageProps} />
 
-      <Pop text="zeel is best"></Pop>
+      {
+
+       popText
+       && 
+        <Pop text={popText} setPop={setPop}></Pop>
+      }
     </div>
   );
 }
