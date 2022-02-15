@@ -24,7 +24,7 @@ export default function Navbar() {
             Play
           </a>
           <a
-            href="/about-us"
+            href="/"
             className="  px-6 flex max-w-md mx-auto overflow-hidden md:max-w-2xl my-5 transform translate-y-0 hover:translate-y-2 duration-500 ease-in-out "
           >
             About Us
