@@ -1,4 +1,6 @@
 import React from "react";
+import { AiOutlineSend } from "react-icons/ai";
+
 
 export default function Chat() {
   return (
@@ -9,17 +11,14 @@ export default function Chat() {
 
       <Chats></Chats>
 
-      <div class="flex relative  ">
-       
+      <div class="flex relative ">
         <input
           type="text"
-          id="email-with-icon"
-          class=" rounded-r-lg flex-1 appearance-none border border-gray-300 w-full py-2 px-4 bg-white text-gray-700 placeholder-gray-400 shadow-sm text-base focus:outline-none focus:ring-2 focus:ring-purple-600 focus:border-transparent"
-          name="email"
-          placeholder="Your email"
+          class="flex-1 appearance-none border border-yellow-500 w-full py-2 px-4 bg-black shadow-sm text-base focus:outline-none  placeholder:text-white"
+          placeholder="Message"
         />
-         <span class="rounded-l-md inline-flex  items-center px-3 border-t bg-white border-l border-b  border-gray-300 text-gray-500 shadow-sm text-sm">
-        
+        <span class="inline-flex  items-center  border border-yellow-500 px-3 py-3  shadow-sm text-sm hover:bg-yellow-400  cursor-pointer hover:text-black">
+          <AiOutlineSend></AiOutlineSend>
         </span>
       </div>
     </div>
@@ -28,12 +27,33 @@ export default function Chat() {
 
 function Chats() {
   return (
-    <div className="flex-2 h-full p-5">
-      <ChatPop></ChatPop>
+    <div className="flex-2 h-full p-5 overflow-auto">
+      <ChatPop user="zeel" text="zeel is best"></ChatPop>
+      <ChatPop user="kp" text="zeel is not best"></ChatPop>
+      <ChatPop user="zeel" text="zeel is best"></ChatPop>
+      <ChatPop user="kp" text="zeel is not best"></ChatPop>
+      <ChatPop user="zeel" text="zeel is best"></ChatPop>
+      <ChatPop user="kp" text="zeel is not best"></ChatPop>
+      <ChatPop user="zeel" text="zeel is best"></ChatPop>
+      <ChatPop user="kp" text="zeel is not best"></ChatPop>
+      <ChatPop user="zeel" text="zeel is best"></ChatPop>
+      <ChatPop user="kp" text="zeel is not best"></ChatPop>
+      <ChatPop user="zeel" text="zeel is best"></ChatPop>
+      <ChatPop user="kp" text="zeel is not best"></ChatPop>
+      <ChatPop user="zeel" text="zeel is best"></ChatPop>
+      <ChatPop user="kp" text="zeel is not best"></ChatPop>
+      <ChatPop user="zeel" text="zeel is best"></ChatPop>
+      <ChatPop user="kp" text="zeel is not best"></ChatPop>
+
     </div>
   );
 }
 
-function ChatPop() {
-  return <div>zeel is best</div>;
+function ChatPop({ user, text }) {
+  return (
+    <div className="flex flex-col">
+      <span className="text-yellow-500">{user} -</span>
+      <span>{text}</span>
+    </div>
+  );
 }

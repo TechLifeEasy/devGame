@@ -3,7 +3,7 @@ import Index from "../components/play/Index";
 import { useEffect, useState } from "react";
 
 export default function Home() {
-  const [isFind, setIsFInd] = useState(true);
+  const [isFind, setIsFInd] = useState(false);
 
   useEffect(() => {
     setTimeout(() => {
