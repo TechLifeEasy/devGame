@@ -16,5 +16,5 @@ const UserSchema = new Schema({
 
 
 
-exports.UserModal = mongoose.model('devBoss.UserModal', UserSchema);
+exports.UserModal = mongoose.model('devgame.usermodal', UserSchema);
 
