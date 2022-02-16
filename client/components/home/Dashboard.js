@@ -4,7 +4,7 @@ import Image from "next/image";
 
 export default function Dashboard() {
   return (
-    <div className="mb-10 flex flex-col gap-10">
+    <div className=" flex flex-col gap-10 bg-black">
       <div className="w-full py-10  flex gap-3 flex-wrap items-center justify-center">
         {/* <Image
           src="/img/top.svg"
@@ -15,7 +15,7 @@ export default function Dashboard() {
 
         <Topers></Topers>
       </div>
-      <div className="text-center">
+      <div className="text-center text-white">
         <h1 className="text-2xl"> How To Play?</h1>
         <Path></Path>
       </div>
@@ -28,7 +28,7 @@ export default function Dashboard() {
 function Path() {
   return (
     <div class="sm:flex flex-wrap justify-center items-center text-center gap-8">
-      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4 bg-white mt-6  shadow-lg rounded-lg dark:bg-gray-800 hover:translate-y-2 duration-500 ease-in-out">
+      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4  text-white mt-6  shadow-lg rounded-lg dark:bg-gray-800 hover:translate-y-2 duration-500 ease-in-out">
         <div class="flex-shrink-0">
           <div class="flex items-center mx-auto justify-center h-12 w-12 rounded-md bg-yellow-500 text-white">
             <svg
@@ -43,15 +43,15 @@ function Path() {
             </svg>
           </div>
         </div>
-        <h3 class="text-2xl sm:text-xl text-gray-700 font-semibold dark:text-white py-4">
+        <h3 class="text-2xl sm:text-xl   font-semibold dark:text-white py-4">
           Website Design
         </h3>
-        <p class="text-md  text-gray-500 dark:text-gray-300 py-4">
+        <p class="text-md     dark:text-gray-300 py-4">
           Encompassing today’s website design technology to integrated and build
           solutions relevant to your business.
         </p>
       </div>
-      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4 mt-6 sm:mt-16 md:mt-20 lg:mt-24 bg-white shadow-lg rounded-lg dark:bg-gray-800 hover:translate-y-2 duration-500 ease-in-out">
+      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4 text-white mt-6 sm:mt-16 md:mt-20 lg:mt-24  shadow-lg rounded-lg dark:bg-gray-800 hover:translate-y-2 duration-500 ease-in-out">
         <div class="flex-shrink-0">
           <div class="flex items-center mx-auto justify-center h-12 w-12 rounded-md bg-yellow-500 text-white">
             <svg
@@ -66,15 +66,15 @@ function Path() {
             </svg>
           </div>
         </div>
-        <h3 class="text-2xl sm:text-xl text-gray-700 font-semibold dark:text-white py-4">
+        <h3 class="text-2xl sm:text-xl   font-semibold dark:text-white py-4">
           Branding
         </h3>
-        <p class="text-md text-gray-500 dark:text-gray-300 py-4">
+        <p class="text-md    dark:text-gray-300 py-4">
           Share relevant, engaging, and inspirational brand messages to create a
           connection with your audience.
         </p>
       </div>
-      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mt-6  px-4 py-4 bg-white shadow-lg rounded-lg dark:bg-gray-800 hover:translate-y-2 duration-500 ease-in-out">
+      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mt-6  px-4 text-white py-4 shadow-lg rounded-lg dark:bg-gray-800 hover:translate-y-2 duration-500 ease-in-out">
         <div class="flex-shrink-0">
           <div class="flex items-center mx-auto justify-center h-12 w-12 rounded-md bg-yellow-500 text-white">
             <svg
@@ -89,10 +89,10 @@ function Path() {
             </svg>
           </div>
         </div>
-        <h3 class="text-2xl sm:text-xl text-gray-700 font-semibold dark:text-white py-4">
+        <h3 class="text-2xl sm:text-xl   font-semibold dark:text-white py-4">
           SEO Marketing
         </h3>
-        <p class="text-md  text-gray-500 dark:text-gray-300 py-4">
+        <p class="text-md     dark:text-gray-300 py-4">
           Let us help you level up your search engine game, explore our
           solutions for digital marketing for your business.
         </p>

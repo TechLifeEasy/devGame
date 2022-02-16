@@ -3,7 +3,7 @@ import { BsGithub } from "react-icons/bs";
 
 export default function Footer() {
   return (
-    <footer className="w-full cursor-pointer  mx-auto px-6 flex items-center justify-between   bg-black text-yellow-500 py-4">
+    <footer className="w-full cursor-pointer  mx-auto px-6 flex items-center justify-between   bg-black text-yellow-500 py-4 border-yellow-500 border-t-2 mt-10">
       <div className="max-w-screen-xl mx-auto px-4 flex flex-col gap-3">
         <div className="flex items-center justify-center">
           <nav className="font-sen   uppercase text-lg lg:flex items-center hidden">
@@ -52,7 +52,7 @@ export default function Footer() {
 
 function User() {
   return (
-    <div  className="shadow-lg rounded-2xl text-black bg-white dark:bg-gray-800 p-4 hover:bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out">
+    <div  className="shadow-lg rounded-2xl text-white bg-black dark:bg-gray-800 p-4 hover:bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out">
       <div  className="flex justify-center items-center">
         <div  className="flex-shrink-0">
           <a href="https://github.com/zeel-codder"  className="block relative">
