@@ -11,6 +11,8 @@
     "@uiw/react-codemirror": "^4.4.1",
     "codemirror": "^5.65.1",
     "next": "12.0.10",
+    "nodemailer": "^6.7.2",
+    "otp-generator": "^4.0.0",
     "react": "17.0.2",
     "react-codemirror": "^1.0.0",
     "react-dom": "17.0.2",
