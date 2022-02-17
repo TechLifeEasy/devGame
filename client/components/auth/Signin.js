@@ -72,7 +72,7 @@ export default function Signin() {
 
              onClick={AddUser}
           >
-            Sing In
+            Sign In
           </button>
         </div>
       </div>

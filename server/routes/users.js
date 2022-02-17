@@ -5,6 +5,9 @@ const { auth } = require("../middleware/auth");
 const brcypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { isUserAlreadyExist, EmailWithPassword } = require("../users/index");
+const otpGenerator = require('otp-generator')
+var nodemailer = require('nodemailer');
+let OTP="";
 /* GET home page. */
 // router.get('/',Users );
 
@@ -23,8 +26,13 @@ router.post("/signup", async (req, res) => {
     if (isEmailValid) {
       return res.status(404).send("Email Already Exist");
     }
+    if(req.otp!==OTP){
+      return res.status(404).send("OTP Invalid");
+    }
     const password = await brcypt.hash(data.password, 15);
     data = { ...data, password };
+
+    delete data.otp;
 
     const token = await jwt.sign(data, process.env.Secrete);
     console.log(token);
@@ -60,5 +68,40 @@ router.post("/signin", async (req, res) => {
     console.log(error);
   }
 });
+
+router.post("/otp",(req,res)=>{
+  try {
+    const data=req.body;
+    const otp=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
+    var transporter = nodemailer.createTransport({
+      service: 'gmail',
+      auth: {
+        user: 'developer9018@gmail.com',
+        pass: 'dhruvil@01'
+      }
+    });
+
+var mailOptions = {
+  from: 'developer9018@gmail.com',
+  to: `${data.email}`,
+  subject: 'Sending Email using Node.js',
+  html: `<h4>Thanks for Visiting our website!<h4><p>Your otp:${otp}</p>`
+};
+
+transporter.sendMail(mailOptions, function(error, info){
+  if (error) {
+    console.log(error);
+  } else {
+    console.log('Email sent: ' + info.response);
+    OTP=otp;
+    return res.status(200).send({otp})
+
+  }
+});
+
+  } catch (error) {
+    console.log(error);
+  }
+})
 
 module.exports = router;
