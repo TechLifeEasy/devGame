@@ -38,12 +38,13 @@ export default function LogIn() {
     <section className="w-11/12 m-auto  flex flex-col items-center justify-center my-3">
     {load?<Load/>:null}
       <div className="space-y-6 text-white">
-        <h1 className="text-center my-3 text-2xl"> Sign In</h1>
+        <h1 className="text-center my-3 text-2xl"> Log In</h1>
         <div className="items-center w-full p-4 space-y-4 text-gray-500 md:inline-flex md:space-y-0 flex gap-3">
           <div className=" flex gap-2">
             <input
               type="email"
               id="user-info-email"
+              name="email"
               className=" rounded-lg border-transparent flex-1 appearance-none   w-full py-2 px-4  text-white placeholder-text-white shadow-sm text-base border-yellow-500 border-2 bg-black "
               placeholder="Email"
               value={state.email}
@@ -64,6 +65,17 @@ export default function LogIn() {
         </div>
 
         {/* </div> */}
+
+        <div className="w-full pb-4 ml-auto text-gray-500 flex  justify-end px-4">
+          <a
+             href="/auth/signin"
+            className="py-2 px-4  bg-black hover:bg-yellow-400  hover:text-black   text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md  border-yellow-500 border-x-2"
+
+            
+          >
+            Create Account
+          </a>
+        </div>
 
         <div className="w-full px-4 pb-4 ml-auto text-gray-500 md:w-2/3">
           <button

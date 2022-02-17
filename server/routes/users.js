@@ -73,6 +73,7 @@ router.post("/signin", async (req, res) => {
 router.post("/otp",async(req,res)=>{
   try {
     const data=req.body;
+    console.log(data)
     const otp=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
     var transporter = nodemailer.createTransport({
       service: 'gmail',
@@ -92,7 +93,7 @@ router.post("/otp",async(req,res)=>{
     transporter.sendMail(mailOptions, function(error, info){
       if (error) {
         console.log(error);
-        return res.status(500).send("Error: "+e)
+        return res.status(500).send("Error: "+error)
       } else {
         console.log('Email sent: ' + info.response);
         console.log("OTP:",otp);

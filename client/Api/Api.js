@@ -1,9 +1,9 @@
 import axios from "axios";
 
-const web = process.env.WebLink || process.env.NEXT_PUBLIC_WebLink;
+const web = process.env.WebLink || process.env.NEXT_PUBLIC_WebLink || 'http://localhost:8080/';
 
 const API = axios.create({ baseURL: web });
-
+console.log(web)
 const APIWithToken = axios.create({ baseURL: web });
 
 APIWithToken.interceptors.request.use((req) => {

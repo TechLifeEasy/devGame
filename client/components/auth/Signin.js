@@ -50,15 +50,22 @@ export default function Signin() {
     
   }
   async function SendOtp(e){
-    e.preventDefault();
-    if(state.email===null){
-      alert("Email field empty")
-      return;
-    }
-    const resp=await getOtp({email:state.email})
-    console.log(resp);
-    if(resp.status===200){
+
+    
+    // e.preventDefault();
+    try{
+
+      if(state.email===null){
+        alert("Email field empty")
+        return;
+      }
+      const resp=await getOtp({email:state.email})
+      console.log(resp);
+      if(resp.status===200){
         setOtp(resp.data.otp)
+      }
+    }catch(e){
+      console.log(e)
     }
   }
   return (
@@ -71,6 +78,7 @@ export default function Signin() {
             <input
               type="email"
               id="user-info-email"
+              name="email"
               className="rounded-lg border-transparent flex-1 appearance-none   w-full py-2 px-4  text-white placeholder-text-white shadow-sm text-base border-yellow-500 border-2 bg-black"
               placeholder="Email"
               value={state.email}
@@ -136,6 +144,17 @@ export default function Signin() {
           />
         </div>
         {/* </div> */}
+
+        <div className="w-full pb-4 ml-auto text-gray-500 flex  justify-end px-4">
+          <a
+             href="/auth/login"
+            className="py-2 px-4  bg-black hover:bg-yellow-400  hover:text-black   text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md  border-yellow-500 border-x-2"
+
+            
+          >
+            Login Hear
+          </a>
+        </div>
 
         <div className="w-full px-4 pb-4 ml-auto text-gray-500 md:w-2/3">
           <button
