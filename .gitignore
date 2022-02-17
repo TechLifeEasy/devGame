@@ -5,6 +5,8 @@
 
 client/.next/*
 
+.env
+
 
 node_modules
 /.pnp
