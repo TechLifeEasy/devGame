@@ -1,17 +1,42 @@
-import React, { useReducer, useState } from "react";
+import React, { useReducer, useState ,useEffect} from "react";
 import { init, reducer  } from "./reducer";
-
+import { getUser, SignIn } from "../../Api/Api";
+import Load from "../helper/Load";
 
 export default function LogIn() {
 
   const [state, dispatch] = useReducer(reducer, init);
-
-  function AddUser(){
+  const [load,setLoad]=useState(false);
+  useEffect(()=>{
+    if(localStorage.getItem("info")!==null){
+      window.location.href='/'
+    }
+  })
+  async function AddUser(){
       console.log(state);
+      setLoad(true);
+      SignIn(state).
+      then((resp)=>{
+        getUser({email:state.email}).then((resp1)=>{
+          const data=resp1.data
+          console.log(data);
+          window.localStorage.setItem("info",JSON.stringify(data))
+          window.location.href='/'
+        })
+      })
+      .catch((e)=>{
+        alert("Please Enter valid Credentials")
+      })
+      .finally(()=>{
+        setLoad(false);
+      })
+      
+
   }
 
   return (
     <section className="w-11/12 m-auto  flex flex-col items-center justify-center my-3">
+    {load?<Load/>:null}
       <div className="space-y-6 text-white">
         <h1 className="text-center my-3 text-2xl"> Sign In</h1>
         <div className="items-center w-full p-4 space-y-4 text-gray-500 md:inline-flex md:space-y-0 flex gap-3">
