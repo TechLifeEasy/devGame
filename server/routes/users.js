@@ -6,8 +6,9 @@ const brcypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { isUserAlreadyExist, EmailWithPassword } = require("../users/index");
 const otpGenerator = require('otp-generator')
+let  SMTPClient  =require('emailjs');
 var nodemailer = require('nodemailer');
-let OTP="";
+
 /* GET home page. */
 // router.get('/',Users );
 
@@ -26,9 +27,9 @@ router.post("/signup", async (req, res) => {
     if (isEmailValid) {
       return res.status(404).send("Email Already Exist");
     }
-    if(req.otp!==OTP){
-      return res.status(404).send("OTP Invalid");
-    }
+    // if(req.otp!==OTP){
+    //   return res.status(404).send("OTP Invalid");
+    // }
     const password = await brcypt.hash(data.password, 15);
     data = { ...data, password };
 
@@ -69,39 +70,56 @@ router.post("/signin", async (req, res) => {
   }
 });
 
-router.post("/otp",(req,res)=>{
+router.post("/otp",async(req,res)=>{
   try {
     const data=req.body;
     const otp=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
     var transporter = nodemailer.createTransport({
       service: 'gmail',
       auth: {
-        user: 'developer9018@gmail.com',
-        pass: 'dhruvil@01'
+        user: process.env.mail,
+        pass: process.env.password_mail
       }
     });
 
-var mailOptions = {
-  from: 'developer9018@gmail.com',
-  to: `${data.email}`,
-  subject: 'Sending Email using Node.js',
-  html: `<h4>Thanks for Visiting our website!<h4><p>Your otp:${otp}</p>`
-};
+    var mailOptions = {
+      from: process.env.mail,
+      to: data.email,
+      subject: 'DevGame OTP',
+      text: `Otp:${otp}`
+    };
 
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-    OTP=otp;
-    return res.status(200).send({otp})
-
+    transporter.sendMail(mailOptions, function(error, info){
+      if (error) {
+        console.log(error);
+        return res.status(500).send("Error: "+e)
+      } else {
+        console.log('Email sent: ' + info.response);
+        console.log("OTP:",otp);
+        return res.status(200).send({otp})
+      }
+    });
+  }
+  catch(e){
+      console.log(e);
+      return res.status(500).send("Error: "+e)
   }
 });
 
+router.post("/byemail",async (req,res)=>{
+  try {
+  const data=req.body;
+  const user=await UserModal.findOne({email:data.email});
+  if (user) {
+    return res.status(200).send(user);
+  }else{
+    return res.status(500).send("error");
+  }
   } catch (error) {
-    console.log(error);
+    return res.status(500).send(error);  
   }
 })
+  
 
 module.exports = router;
+

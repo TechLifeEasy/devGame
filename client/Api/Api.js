@@ -16,8 +16,8 @@ APIWithToken.interceptors.request.use((req) => {
   return req;
 });
 
-const SingUp = (data) => API.post("/users/sign_up", data);
-const SingIn = (data) => API.post("/users/sign_in", data);
-
-
-export {SingIn,SingUp}
+const SignUp = (data) => API.post("/users/signup", data);
+const SignIn = (data) => API.post("/users/signin", data);
+const getOtp = (data) => API.post("/users/otp",data);
+const getUser= (data) => API.post("/users/byemail",data);
+export {SignIn,SignUp,getOtp,getUser}
