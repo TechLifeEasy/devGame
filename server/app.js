@@ -11,6 +11,7 @@ const logger = require("morgan");
 const db = require("./db/connections/DataBaseConnection");
 const indexRouter = require("./routes/index");
 const usersRouter = require("./routes/users");
+const PuzzleRouter = require("./routes/puzzle");
 const {Main} =require('./socket/index');
 
 
@@ -34,6 +35,7 @@ Main(server)
 
 app.use("/", indexRouter);
 app.use("/users", usersRouter);
+app.use("/puzzle", PuzzleRouter);
 
 
 // catch 404 and forward to error handler

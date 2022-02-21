@@ -1,9 +1,12 @@
 import axios from "axios";
 
-const web = process.env.WebLink || process.env.NEXT_PUBLIC_WebLink || 'http://localhost:8080/';
+const web =
+  process.env.WebLink ||
+  process.env.NEXT_PUBLIC_WebLink ||
+  "http://localhost:8080/";
 
 const API = axios.create({ baseURL: web });
-console.log(web)
+console.log(web);
 const APIWithToken = axios.create({ baseURL: web });
 
 APIWithToken.interceptors.request.use((req) => {
@@ -18,6 +21,8 @@ APIWithToken.interceptors.request.use((req) => {
 
 const SignUp = (data) => API.post("/users/signup", data);
 const SignIn = (data) => API.post("/users/signin", data);
-const getOtp = (data) => API.post("/users/otp",data);
-const getUser= (data) => API.post("/users/byemail",data);
-export {SignIn,SignUp,getOtp,getUser}
+const getOtp = (data) => API.post("/users/otp", data);
+const getUser = (data) => API.post("/users/byemail", data);
+const getQuiz = () => API.get("/puzzle");
+
+export { SignIn, SignUp, getOtp, getUser, getQuiz };

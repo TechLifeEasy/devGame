@@ -8,7 +8,8 @@ const PORT='http://127.0.0.1:8080/';
 
 const inits={
   isFind:true,
-  dataPartner:null
+  dataPartner:null,
+  question:null
 }
 
 function reducer(state, action) {
@@ -20,6 +21,9 @@ function reducer(state, action) {
       return { ...state, isFind: action.data };
     case "dataPartner":
       return { ...state, dataPartner: action.data };
+    case "question":
+      return { ...state, question: action.data };
+    
     default:
       throw new Error("Invalid");
   }
@@ -36,11 +40,12 @@ export default function Home() {
 
   function init(){
       socket.emit('join_room',window.localStorage.getItem("info"));
-      socket.on('join_me',(room_id,data)=>{
+      socket.on('join_me',(room_id,data,question)=>{
         console.log(room_id)
         dispatch({type:"dataPartner",data:data});
         console.log(data)
         dispatch({type:"isFind",data:false})
+        dispatch({type:"question",data:question})
         console.log("Donnaa");
         socket.emit('join_room_id',(room_id))
       })
