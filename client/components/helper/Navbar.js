@@ -21,6 +21,20 @@ export default function Navbar() {
       </div>
       <div className="flex items-center">
         <nav className="font-sen   uppercase text-lg lg:flex items-center hidden">
+          {auth?<>
+          <a
+            href="/auth/login"
+            className="  px-6 flex max-w-md mx-auto overflow-hidden md:max-w-2xl my-5 transform translate-y-0 hover:translate-y-2 duration-500 ease-in-out "
+          >
+            Log In
+          </a>
+          <a
+            href="/auth/signin"
+            className="  px-6 flex max-w-md mx-auto overflow-hidden md:max-w-2xl my-5 transform translate-y-0 hover:translate-y-2 duration-500 ease-in-out "
+          >
+            Sign In
+          </a>
+          </>:<>
           <a
             href="/"
             className="  px-6 flex max-w-md mx-auto overflow-hidden md:max-w-2xl my-5 transform translate-y-0 hover:translate-y-2 duration-500 ease-in-out "
@@ -39,20 +53,7 @@ export default function Navbar() {
           >
             Zeel
           </a>
-          {auth?<>
-          <a
-            href="/auth/login"
-            className="  px-6 flex max-w-md mx-auto overflow-hidden md:max-w-2xl my-5 transform translate-y-0 hover:translate-y-2 duration-500 ease-in-out "
-          >
-            Log In
-          </a>
-          <a
-            href="/auth/signin"
-            className="  px-6 flex max-w-md mx-auto overflow-hidden md:max-w-2xl my-5 transform translate-y-0 hover:translate-y-2 duration-500 ease-in-out "
-          >
-            Sign In
-          </a>
-          </>:<>
+          
             <a href="/auth/signout"
             className="  px-6 flex max-w-md mx-auto overflow-hidden md:max-w-2xl my-5 transform translate-y-0 hover:translate-y-2 duration-500 ease-in-out ">
             Sign Out
