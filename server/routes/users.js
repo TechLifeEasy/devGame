@@ -7,7 +7,7 @@ const jwt = require("jsonwebtoken");
 const { isUserAlreadyExist, EmailWithPassword } = require("../users/index");
 const otpGenerator = require('otp-generator')
 let  SMTPClient  =require('emailjs');
-var nodemailer = require('nodemailer');
+// var nodemailer = require('nodemailer');
 
 /* GET home page. */
 // router.get('/',Users );
@@ -51,6 +51,7 @@ router.post("/signup", async (req, res) => {
   }
 });
 
+
 router.post("/signin", async (req, res) => {
   try {
     const data = req.body;
@@ -75,31 +76,26 @@ router.post("/otp",async(req,res)=>{
     const data=req.body;
     console.log(data)
     const otp=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
-    var transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.mail,
-        pass: process.env.password_mail
-      }
+    const client = new SMTPClient({
+      user: process.env.mail,
+      password: process.env.password_mail,
+      host: 'smtp.gmail.com',
+      ssl:true
     });
-
-    var mailOptions = {
-      from: process.env.mail,
-      to: data.email,
-      subject: 'DevGame OTP',
-      text: `Otp:${otp}`
-    };
-
-    transporter.sendMail(mailOptions, function(error, info){
-      if (error) {
-        console.log(error);
-        return res.status(500).send("Error: "+error)
-      } else {
-        console.log('Email sent: ' + info.response);
-        console.log("OTP:",otp);
-        return res.status(200).send({otp})
+    try{
+      const message = await client.sendAsync({
+           text: `OTP:${otp}`,
+           from: process.env.mail,
+           to: email,
+           subject: 'Dev Game OTP'
+    ,
+      });
       }
-    });
+    catch(e){
+      return res.status(400).send(JSON.stringify({ message:"Error" }))
+      
+    }
+    return res.status(200).send({otp})
   }
   catch(e){
       console.log(e);
