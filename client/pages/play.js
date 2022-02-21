@@ -1,19 +1,27 @@
 import PreMatch from "../components/play/PreMatch";
 import Index from "../components/play/Index";
 import { useEffect, useState } from "react";
+import {io} from 'socket.io-client';
 
+const PORT='http://127.0.0.1:8080/';
 export default function Home() {
   const [isFind, setIsFInd] = useState(true);
-
+  
+  const socket=io(PORT);
   useEffect(() => {
-    setTimeout(() => {
-      setIsFInd(false);
-    }, 5000);
-  }, []);
-
+    socket.emit('join_room',window.localStorage.getItem("info"));
+    socket.on('join_me',(room_id)=>{
+      setIsFInd(false)
+      console.log("Donnaa");
+      socket.emit('join_room_id',(room_id))
+    })
+    // setInterval(() => {
+    //   setIsFInd(false)
+    // }, 5000);
+  }, [PORT]);
   return (
     <div className="w-full h-screen flex items-center justify-center bg-black text-white">
-      {isFind ? <PreMatch></PreMatch> : <Index></Index>}
+      {isFind ? <PreMatch></PreMatch>:<Index></Index>}
     </div>
   );
 }
