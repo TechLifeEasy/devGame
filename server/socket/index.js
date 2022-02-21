@@ -39,6 +39,12 @@ function Main(server) {
     socket.on("disconnect", () => {
       console.log("Disconnected");
     });
+
+    socket.on("mess",(data)=>{
+      console.log(data.room_id);
+      socket.broadcast.emit('message_other',data);
+    })
+  
   });
 }
 
