@@ -3,6 +3,9 @@ import { init, reducer  } from "./reducer";
 import {getOtp, SignUp} from '../../Api/Api'
 import Load from '../helper/Load'
 
+import emailjs from '@emailjs/browser';
+
+
 export default function Signin() {
   
   const [state, dispatch] = useReducer(reducer, init);
@@ -49,6 +52,19 @@ export default function Signin() {
     
     
   }
+  function generateOTP() {
+          
+    // Declare a string variable 
+    // which stores all string
+    var string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    let OTP = '';
+    // Find the length of string
+    var len = string.length;
+    for (let i = 0; i < 6; i++ ) {
+        OTP += string[Math.floor(Math.random() * len)];
+    }
+    return OTP;
+}
   async function SendOtp(e){
 
     
@@ -59,11 +75,20 @@ export default function Signin() {
         alert("Email field empty")
         return;
       }
-      const resp=await getOtp({email:state.email})
-      console.log(resp);
-      if(resp.status===200){
-        setOtp(resp.data.otp)
-      }
+      // const resp=await getOtp({email:state.email})
+      // console.log(resp);
+      // if(resp.status===200){
+      //   setOtp(resp.data.otp)
+      // }
+      // const otp=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
+      const otp=generateOTP()
+      emailjs.send('service_vw4pxol', 'template_muhwzc5', {otp:otp,email:state.email}, 'user_XSA0W9Igma8yKzhDg8kJ3')
+      .then((result) => {
+          console.log(result.text);
+          setOtp(otp)
+      }, (error) => {
+          console.log(error.text);
+      });
     }catch(e){
       console.log(e)
     }
