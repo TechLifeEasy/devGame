@@ -7,7 +7,7 @@ import {
 
 import { useEffect,useState } from "react";
 
-function User({ isPlay}) {
+function User({ isPlay,name,email,isMe}) {
 
   const [isMicOn, setIsMicOn] = useState(false);
   const [isVideo, setIsVideo] = useState(false);
@@ -70,12 +70,12 @@ function User({ isPlay}) {
                 class="mx-auto object-cover rounded-full h-16 w-16 "
               />
             </a>
-            <p class=" text-xl font-medium mt-2 text-yellow-500">zeel</p>
+            <p class=" text-xl font-medium mt-2 text-yellow-500">{name}</p>
           </div>
         </>
       )}
 
-      {isPlay && (
+      {isPlay && isMe && (
         <div className="absolute flex gap-2 text-xl mt-3 bottom-3 left-1/2 -translate-x-1/2">
           <div onClick={() => {
            

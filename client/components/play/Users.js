@@ -2,10 +2,17 @@ import React, { useEffect, useState } from "react";
 import User from "../helper/UserPop";
 import { GoHubot } from "react-icons/go";
 
+export default function Users({ state }) {
+  const data = { isPlay: true };
+  const [me, setMe] = useState(null);
 
-export default function Users() {
- 
-  const data = { isPlay: true};
+  useEffect(() => {
+    setMe(JSON.parse(window.localStorage.getItem("info")));
+  }, []);
+
+  if(me==null){
+    return <></>
+  }
 
   return (
     <div className="flex  flex-1  flex-col gap-4 items-center  border-r-2 border-yellow-500">
@@ -13,9 +20,13 @@ export default function Users() {
         <GoHubot></GoHubot>
         <div>devGame</div>
       </div>
-      <User {...data}></User>
+    
+        <User {...data} {...me} isMe={true}></User>
+      
       <div className="text-2xl text-yellow-500">&</div>
-      <User {...data}></User>
+   
+        <User {...data} {...state.dataPartner} isMe={false}></User>
+      
     </div>
   );
 }
