@@ -3,8 +3,7 @@ import Chat from './Chat'
 import Editor from './Problem'
 import Users from './Users'
 
-
-export default function Index() {
+export default function Index({socket}) {
   return (
     <div className='flex  w-full h-full'>
       <button  onClick={()=>{
@@ -14,7 +13,7 @@ export default function Index() {
       </button>
       <Users ></Users>
       <Editor ></Editor>
-      <Chat></Chat>
+      <Chat socket={socket}></Chat>
     </div>
   )
 }

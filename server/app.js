@@ -53,11 +53,13 @@ io.on('connection', (socket) => {
     
     if(queue.length===0){
         info.room_id=generateOTP();
+        room_id=info.room_id
         queue.push(info)
         
     }else{
         let user=queue.pop();
         info.room_id=user.room_id;
+        room_id=info.room_id
         socket.emit("join_me",user.room_id)
         socket.to(user.socket_id).emit("join_me",user.room_id)
     }
@@ -70,6 +72,11 @@ io.on('connection', (socket) => {
   socket.on('join_room_id',(room_id)=>{
     console.log("finally");
     socket.join(room_id);
+  })
+
+  socket.on("mess",(data)=>{
+    console.log(data.room_id);
+    socket.broadcast.emit('message_other',data);
   })
 
   socket.on('disconnect',()=>{
