@@ -116,6 +116,15 @@ router.post("/byemail",async (req,res)=>{
     return res.status(500).send(error);  
   }
 })
+
+router.get("/all",async (req,res)=>{
+  try {
+  let data=await UserModal.find().sort({"rating":-1});
+  res.status(200).send(data); 
+  } catch (error) {
+    console.log(error);
+  }
+})
   
 
 module.exports = router;
