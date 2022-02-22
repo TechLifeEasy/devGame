@@ -23,6 +23,7 @@ const SignUp = (data) => API.post("/users/signup", data);
 const SignIn = (data) => API.post("/users/signin", data);
 const getOtp = (data) => API.post("/users/otp", data);
 const getUser = (data) => API.post("/users/byemail", data);
+const getAll = () => API.get("/users/all");
 const getQuiz = () => API.get("/puzzle");
 
-export { SignIn, SignUp, getOtp, getUser, getQuiz };
+export { SignIn, SignUp, getOtp, getUser, getQuiz,getAll};

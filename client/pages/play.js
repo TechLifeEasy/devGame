@@ -39,14 +39,14 @@ export default function Home() {
     console.log('call init')
     socket.emit("join_room", window.localStorage.getItem("info"));
     socket.on("join_me", (room_id, data, question) => {
-      console.log(room_id);
-      window.localStorage.setItem("room_id", room_id);
-      dispatch({ type: "dataPartner", data: { ...data, room_id: room_id } });
-      console.log(data);
-      dispatch({ type: "isFind", data: false });
-      dispatch({ type: "question", data: question });
-      console.log("Donnaa");
-      socket.emit("join_room_id", room_id);
+    console.log(room_id);
+    window.localStorage.setItem("room_id", room_id);
+    dispatch({ type: "dataPartner", data: { ...data, room_id: room_id } });
+    console.log(data);
+    dispatch({ type: "isFind", data: false });
+    dispatch({ type: "question", data: question });
+    console.log("Donnaa");
+    socket.emit("join_room_id", room_id);
     });
   }
 

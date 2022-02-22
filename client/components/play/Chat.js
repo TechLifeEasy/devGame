@@ -15,6 +15,8 @@ export default function Chat(props) {
       setList([...list,{name:data.name,message:data.message}])
     }
   })
+
+
   const sendMsg=()=>{
     let user=window.localStorage.getItem('info');
     user=JSON.parse(user)
