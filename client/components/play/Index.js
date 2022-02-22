@@ -16,7 +16,7 @@ export default function Index(props) {
       </button>
       <Users {...props}></Users>
       <Editor {...props.state}></Editor>
-      <Chat socket={props.socket}></Chat>
+      <Chat socket={props.socket} {...props.state}></Chat>
     </div>
   );
 }

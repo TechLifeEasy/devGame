@@ -6,18 +6,22 @@ export default function Chat(props) {
   const [msg, setMsg] = useState("");
   const [list,setList] =useState([])
   props.socket.on('message_other',(data)=>{
+    let user=window.localStorage.getItem('info');
+    user=JSON.parse(user)
     if(window.localStorage.getItem("room_id")!==data.room_id)
     return;
     console.log("mailu k nai");
-    setList([...list,{name:data.name,message:data.message}])
+    if(data.name!=user.name){
+      setList([...list,{name:data.name,message:data.message}])
+    }
   })
   const sendMsg=()=>{
     let user=window.localStorage.getItem('info');
     user=JSON.parse(user)
     setList([...list,{name:"You",message:msg}])
-    let room_id=window.localStorage.getItem("room_id");
+    let room_id=props.dataPartner.room_id;
     // console.log(user);
-    props.socket.emit("mess",({name:user.name,message:msg,room_id:room_id}));
+    props.socket.emit("mess",{name:user.name,message:msg,room_id});
     setMsg("")
   }
   return (

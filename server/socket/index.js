@@ -24,8 +24,8 @@ function Main(server) {
         info.room_id = user.room_id;
         getRanDomQuiz()
           .then((data) => {
-            socket.emit("join_me", user.room_id, user,data);
-            socket.to(user.socket_id).emit("join_me", user.room_id, info,data);
+            socket.emit("join_me", user.room_id, user, data);
+            socket.to(user.socket_id).emit("join_me", user.room_id, info, data);
           })
           .catch((e) => {
             console.log(e);
@@ -40,13 +40,14 @@ function Main(server) {
       socket.join(room_id);
     });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected");
+    socket.on("mess", (data) => {
+      console.log('call mess');
+      console.log(data.room_id);
+      io.to(data.room_id).emit("message_other", data);
     });
 
-    socket.on("mess", (data) => {
-      console.log(data.room_id);
-      socket.broadcast.emit("message_other", data);
+    socket.on("disconnect", () => {
+      console.log("Disconnected");
     });
   });
 }

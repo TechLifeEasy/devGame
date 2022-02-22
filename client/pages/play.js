@@ -1,20 +1,19 @@
 import PreMatch from "../components/play/PreMatch";
 import Index from "../components/play/Index";
-import { useEffect, useState,useReducer } from "react";
-import {io} from 'socket.io-client';
+import { useEffect, useState, useReducer,useLayoutEffect } from "react";
+import { io } from "socket.io-client";
 import { BsInfo } from "react-icons/bs";
 
-const PORT='http://127.0.0.1:8080/';
+const PORT = "http://127.0.0.1:8080/";
 
-const inits={
-  isFind:true,
-  dataPartner:null,
-  question:null
-}
+const inits = {
+  isFind: true,
+  dataPartner: null,
+  question: null,
+};
 
 function reducer(state, action) {
-
-  console.log(action)
+  console.log(action);
 
   switch (action.type) {
     case "isFind":
@@ -23,48 +22,45 @@ function reducer(state, action) {
       return { ...state, dataPartner: action.data };
     case "question":
       return { ...state, question: action.data };
-    
+
     default:
       throw new Error("Invalid");
   }
 }
 
-
-
-
 export default function Home() {
-
   const [state, dispatch] = useReducer(reducer, inits);
- 
-  const socket=io(PORT);
+  const [socket, setSocket] = useState(null);
 
-  function init(){
-      socket.emit('join_room',window.localStorage.getItem("info"));
-      socket.on('join_me',(room_id,data,question)=>{
-        console.log(room_id)
-        dispatch({type:"dataPartner",data:data});
-        console.log(data)
-        dispatch({type:"isFind",data:false})
-        dispatch({type:"question",data:question})
-        console.log("Donnaa");
-        socket.emit('join_room_id',(room_id))
-      })
+  
+  function init() {
+    let socket = io(PORT);
+    setSocket(socket)
+    console.log('call init')
+    socket.emit("join_room", window.localStorage.getItem("info"));
+    socket.on("join_me", (room_id, data, question) => {
+      console.log(room_id);
+      window.localStorage.setItem("room_id", room_id);
+      dispatch({ type: "dataPartner", data: { ...data, room_id: room_id } });
+      console.log(data);
+      dispatch({ type: "isFind", data: false });
+      dispatch({ type: "question", data: question });
+      console.log("Donnaa");
+      socket.emit("join_room_id", room_id);
+    });
   }
-  
-  
+
   useEffect(() => {
-
-    init()
-
-  },[])
-
-  
+    init();
+  }, []);
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-black text-white">
-      {state.isFind ? <PreMatch></PreMatch>:<Index state={state} dispatch={dispatch} socket={socket}></Index>}
-
+      {state.isFind ? (
+        <PreMatch></PreMatch>
+      ) : (
+        <Index state={state} dispatch={dispatch} socket={socket}></Index>
+      )}
     </div>
   );
 }
-
