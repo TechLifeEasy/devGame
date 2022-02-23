@@ -3,7 +3,7 @@ import axios from "axios";
 const web =
   process.env.WebLink ||
   process.env.NEXT_PUBLIC_WebLink ||
-  "http://localhost:8080/";
+  "https://devgamie.herokuapp.com/";
 
 const API = axios.create({ baseURL: web });
 console.log(web);
