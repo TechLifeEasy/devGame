@@ -49,7 +49,10 @@ function Main(server) {
     socket.on("disconnect", () => {
       console.log("Disconnected");
     });
-    
+    socket.on("change_que",(que,room_id)=>{
+      console.log("Inside server que",room_id);
+      socket.broadcast.emit("new_question", que,room_id);
+    })
   });
 }
 

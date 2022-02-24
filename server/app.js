@@ -37,14 +37,12 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/puzzle", PuzzleRouter);
 
-
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // console.log=()=>{}
-
 
 if (process.env.NODE_ENV === 'production') {
   const { PORT = 3000, LOCAL_ADDRESS = '0.0.0.0' } = process.env
@@ -60,7 +58,6 @@ if (process.env.NODE_ENV === 'production') {
     console.log(`Server app listening at http://localhost:${port}`)
   })
 }
-
 
 function generateOTP() {
   var string = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';

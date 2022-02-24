@@ -65,7 +65,17 @@ export default function LogIn() {
         </div>
 
         {/* </div> */}
+        <div className="w-full px-4 pb-4 ml-auto text-gray-500 md:w-2/3">
+          <button
+            type="submit"
+            className="py-2 px-4  bg-black hover:bg-yellow-400  hover:text-black   text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md     border-yellow-500 border-x-2"
 
+             onClick={AddUser}
+          >
+            Log In
+          </button>
+        </div>
+        
         <div className="w-full pb-4 ml-auto text-gray-500 flex  justify-end px-4">
           <a
              href="/auth/signin"
@@ -77,16 +87,7 @@ export default function LogIn() {
           </a>
         </div>
 
-        <div className="w-full px-4 pb-4 ml-auto text-gray-500 md:w-2/3">
-          <button
-            type="submit"
-            className="py-2 px-4  bg-black hover:bg-yellow-400  hover:text-black   text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md     border-yellow-500 border-x-2"
-
-             onClick={AddUser}
-          >
-            Log In
-          </button>
-        </div>
+        
       </div>
     </section>
   );
