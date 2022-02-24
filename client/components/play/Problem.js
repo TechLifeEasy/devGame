@@ -45,10 +45,15 @@ function Problem({ socket, question }) {
   const [chance, setChance] = useState(3);
   const [currque, setQue] = useState(question);
   useEffect(() => {
-    initSocket();
-    // getNewQue();
     setQue(question);
+    initSocket();
   }, []);
+  socket.on("new_chance",(room_id,num)=>{
+    if(window.localStorage.getItem("room_id")!=room_id)
+    return;
+    
+      setChance(num);
+    })
 
   function reducer(state, action) {
     // console.log("state in",state);
@@ -90,8 +95,13 @@ function Problem({ socket, question }) {
       console.log("change ans");
       dispatch({ type: "ansSo", data: data.data });
     });
+    
   }
 
+  const setSocketChance=(num)=>{
+    const room_id=window.localStorage.getItem("room_id");
+    socket.emit("change_chance",(room_id,num));
+  }
   async function CheckAns() {
     console.log(currque);
     const data = state.ans;
@@ -110,13 +120,16 @@ function Problem({ socket, question }) {
     );
     if (ans) {
       setChance(3);
+      setSocketChance(3);
       // dispatch({ type: "reset", key: init })
       console.log(state);
       getNewQue();
     } else {
       setChance(chance - 1);
+      setSocketChance(chance-1);
       if (chance == 0) {
         setChance(3);
+        setSocketChance(3);
         alert("You've used all your chances\n Get Ready For New Question");
         getNewQue();
         //  dispatch({ type: "reset", key: init })
@@ -128,7 +141,6 @@ function Problem({ socket, question }) {
 
     // }
   }
-
   const getNewQue = async () => {
     try {
 

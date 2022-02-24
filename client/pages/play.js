@@ -2,7 +2,7 @@ import PreMatch from "../components/play/PreMatch";
 import Index from "../components/play/Index";
 import { useEffect, useState, useReducer,useLayoutEffect } from "react";
 import { io } from "socket.io-client";
-import { BsInfo } from "react-icons/bs";
+import { BsInfo, BsWindowSidebar } from "react-icons/bs";
 
 const PORT = "http://127.0.0.1:8080/";
 
@@ -31,7 +31,6 @@ function reducer(state, action) {
 export default function Home() {
   const [state, dispatch] = useReducer(reducer, inits);
   const [socket, setSocket] = useState(null);
-
   
   function init() {
     let socket = io(PORT);
@@ -49,9 +48,9 @@ export default function Home() {
     socket.emit("join_room_id", room_id);
     });
   }
-
   useEffect(() => {
     init();
+    
   }, []);
 
   return (
