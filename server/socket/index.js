@@ -53,6 +53,12 @@ function Main(server) {
       console.log("Inside server que",room_id);
       socket.broadcast.emit("new_question", que,room_id);
     })
+
+    socket.on("AnsChange",(data)=>{
+      console.log('call ans change')
+      console.log(data)
+      io.to(data.room_id).emit("changeAns", data);
+    })
   });
 }
 

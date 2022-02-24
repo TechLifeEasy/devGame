@@ -5,19 +5,35 @@ import {
   BsFillCameraVideoOffFill,
 } from "react-icons/bs";
 
-import { useEffect,useState } from "react";
+const url = [
+  "https://cdn-icons.flaticon.com/png/512/4140/premium/4140047.png?token=exp=1645702659~hmac=56e2c2a16f51f7ec5a10ad49dfbef661",
+  "https://cdn-icons-png.flaticon.com/128/1177/1177568.png",
+  "https://cdn-icons-png.flaticon.com/512/219/219969.png",
+  "https://cdn-icons-png.flaticon.com/512/924/924874.png",
+  "https://cdn-icons-png.flaticon.com/512/2922/2922561.png",
+  "https://cdn-icons.flaticon.com/png/512/1785/premium/1785888.png?token=exp=1645702669~hmac=bbe7cee9b0e13a08399b1629747433f3",
+  "https://cdn-icons-png.flaticon.com/512/236/236832.png",
+  "https://cdn-icons-png.flaticon.com/512/2922/2922510.png",
+  "https://cdn-icons.flaticon.com/png/512/3006/premium/3006876.png?token=exp=1645702676~hmac=b3acf2c14625555242acd149a9161826",
+];
 
-function User({ isPlay,name,email,isMe}) {
+function getUrl() {
+  let index = Math.floor(Math.random() * url.length);
+  return url[index];
+}
 
+import { useEffect, useState } from "react";
+
+function User({ isPlay, name, email, isMe }) {
   const [isMicOn, setIsMicOn] = useState(false);
   const [isVideo, setIsVideo] = useState(false);
+  const [userAvt, setUrl] = useState(getUrl());
 
   function startStreamedVideo() {
+    // Prefer camera resolution nearest to 1280x720.
+    let constraints = { audio: true, video: { width: 1280, height: 720 } };
 
-      // Prefer camera resolution nearest to 1280x720.
-      let constraints = { audio: true, video: { width: 1280, height: 720 } };
-      
-      navigator.mediaDevices
+    navigator.mediaDevices
       .getUserMedia(constraints)
       .then(function (mediaStream) {
         var video = document.querySelector(".user-v");
@@ -29,19 +45,18 @@ function User({ isPlay,name,email,isMe}) {
       .catch(function (err) {
         console.log(err.name + ": " + err.message);
       }); // always check for errors at the end.
-    }
-
+  }
 
   function stopStreamedVideo() {
     var video = document.querySelector(".user-v");
     const stream = video.srcObject;
     const tracks = stream.getTracks();
-    console.log(tracks)
-  
-    tracks.forEach(function(track) {
+    console.log(tracks);
+
+    tracks.forEach(function (track) {
       track.stop();
     });
-  
+
     video.srcObject = null;
   }
 
@@ -49,10 +64,7 @@ function User({ isPlay,name,email,isMe}) {
     <div class=" relative shadow-lg rounded-2xl w-64  text-black  dark:bg-gray-800 p-4 bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out cursor-pointer">
       {isVideo ? (
         <video autoPlay loop className=" h-48 user-v">
-          <source
-            src=""
-            type="video/webm"
-          />
+          <source src="" type="video/webm" />
           Sorry, your browser doesn't support embedded videos.
         </video>
       ) : (
@@ -66,7 +78,7 @@ function User({ isPlay,name,email,isMe}) {
             <a class="block relative">
               <img
                 alt="profil"
-                src="https://zeelcodder.tech/images/home/zeel.jpeg"
+                src={userAvt}
                 class="mx-auto object-cover rounded-full h-16 w-16 "
               />
             </a>
@@ -77,26 +89,27 @@ function User({ isPlay,name,email,isMe}) {
 
       {isPlay && isMe && (
         <div className="absolute flex gap-2 text-xl mt-3 bottom-3 left-1/2 -translate-x-1/2">
-          <div onClick={() => {
-           
-            setIsMicOn(!isMicOn)
-          }}>
+          <div
+            onClick={() => {
+              setIsMicOn(!isMicOn);
+            }}
+          >
             {isMicOn ? (
               <BsFillMicFill></BsFillMicFill>
             ) : (
               <BsFillMicMuteFill></BsFillMicMuteFill>
             )}
           </div>
-          <div onClick={() => {
-
-            if(isVideo){
-
-              stopStreamedVideo()
-            }else{
-              startStreamedVideo()
-            }
-            setIsVideo(!isVideo)
-          }}>
+          <div
+            onClick={() => {
+              if (isVideo) {
+                stopStreamedVideo();
+              } else {
+                startStreamedVideo();
+              }
+              setIsVideo(!isVideo);
+            }}
+          >
             {isVideo ? (
               <BsFillCameraVideoFill></BsFillCameraVideoFill>
             ) : (

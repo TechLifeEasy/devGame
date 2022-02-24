@@ -1,4 +1,4 @@
-import {React,useState} from "react";
+import { React, useState } from "react";
 import EditorCode2 from "./code/Editor";
 const brcypt = require("bcryptjs");
 import { useReducer, useEffect } from "react";
@@ -22,27 +22,7 @@ const init = {
   },
 };
 
-function reducer(state, action) {
-  // console.log("state in",state);
-  switch (action.type) {
-    case "ans":
-      return {
-        ...state,
-        ans: { ...state.ans, [action.key]: !state.ans[action.key] },
-      };
-    case "reset":
-      return {
-        ...state,
-        ans:init
-      }
-    default:
-      throw new Error("Invalid");
-  }
-}
-
-export { init, reducer };
-
-export default function Editor({socket, question }) {
+export default function Editor({ socket, question }) {
   return (
     <div className="w-2/4 flex-2 py-4 overflow-auto h-full p-4">
       <Problem socket={socket} question={question}></Problem>
@@ -60,72 +40,119 @@ export default function Editor({socket, question }) {
 //   );
 // }
 
-function Problem({socket, question }) {
+function Problem({ socket, question }) {
   const [state, dispatch] = useReducer(reducer, init);
-  const [chance, setChance] = useState(3)
-  const [currque,setQue]=useState();
+  const [chance, setChance] = useState(3);
+  const [currque, setQue] = useState(question);
   useEffect(() => {
-    getNewQue()
+    initSocket();
+    // getNewQue();
     setQue(question);
-  }, [])
+  }, []);
 
-  socket.on("new_question",(que,room_id)=>{
-    if(window.localStorage.getItem("room_id")!==room_id)
-    return;
-    console.log("Inside Client que");
-    setQue(que);
-  })
-  
-  async function CheckAns(){
+  function reducer(state, action) {
+    // console.log("state in",state);
+    switch (action.type) {
+      case "ans":
+        const newAns = { ...state.ans, [action.key]: !state.ans[action.key] };
+        socket.emit("AnsChange", {
+          data: newAns,
+          room_id: window.localStorage.getItem("room_id"),
+        });
+        return {
+          ...state,
+          ans: { ...state.ans, [action.key]: !state.ans[action.key] },
+        };
+      case "ansSo":
+        console.log(state.ans)
+        console.log(action.data)
+        return {
+          ...state,
+          ans: action.data,
+        };
+      case "reset":
+        return {
+          ...state,
+          ans: init,
+        };
+      default:
+        throw new Error("Invalid");
+    }
+  }
+
+  function initSocket() {
+    socket.on("new_question", (que, room_id) => {
+      if (window.localStorage.getItem("room_id") !== room_id) return;
+      console.log("Inside Client que");
+      setQue(que);
+    });
+    socket.on("changeAns", (data) => {
+      console.log("change ans");
+      dispatch({ type: "ansSo", data: data.data });
+    });
+  }
+
+  async function CheckAns() {
     console.log(currque);
-    const data=state.ans;
+    const data = state.ans;
 
-    for(let key in data){
+    for (let key in data) {
       // console.log(data[key])
-      data[key]=data[key]?"true":"false";
+      data[key] = data[key] ? "true" : "false";
     }
     // console.log(JSON.stringify(data)==JSON.stringify(question.correct_answers2))
     // console.log(JSON.stringify(data))
     // console.log(JSON.stringify(question.correct_answers2))
-    
-    const ans=await brcypt.compare(JSON.stringify(data),currque.correct_answers);
-    if(ans){
+
+    const ans = await brcypt.compare(
+      JSON.stringify(data),
+      currque.correct_answers
+    );
+    if (ans) {
+      setChance(3);
+      // dispatch({ type: "reset", key: init })
+      console.log(state);
+      getNewQue();
+    } else {
+      setChance(chance - 1);
+      if (chance == 0) {
         setChance(3);
-        // dispatch({ type: "reset", key: init })
-        console.log(state);
+        alert("You've used all your chances\n Get Ready For New Question");
         getNewQue();
-    }else{
-      setChance(chance-1)
-      if(chance==0){
-        setChance(3)    
-        alert("You've used all your chances\n Get Ready For New Question")
-         getNewQue();
         //  dispatch({ type: "reset", key: init })
-         console.log(state);
+        console.log(state);
       }
     }
     // if(ans){
-      alert(ans);
-
+    alert(ans);
 
     // }
   }
 
-  const getNewQue=async()=>{
-      try {
-        getQuiz()
-        .then((que)=>{
+  const getNewQue = async () => {
+    try {
+
+      socket.emit("AnsChange", {
+        data: init.ans,
+        room_id: window.localStorage.getItem("room_id"),
+      });
+      getQuiz()
+        .then((que) => {
           console.log(que);
-          setQue(que.data)
-          socket.emit("change_que",(que.data),window.localStorage.getItem("room_id"));
+          setQue(que.data);
+          socket.emit(
+            "change_que",
+            que.data,
+            window.localStorage.getItem("room_id")
+          );
         })
-        .catch((e)=>{
-            console.log(e);
-        })
-      } catch (error) {
-        console.log(error);
-      }
-  }
+        .catch((e) => {
+          console.log(e);
+        });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-10 mb-10">
@@ -167,8 +194,8 @@ function Problem({socket, question }) {
                   class="form-tick  cursor-pointer appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_a_correct" })
-                    
                   }
+                  checked={state.ans.answer_a_correct?"on":""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_a}
@@ -186,6 +213,7 @@ function Problem({socket, question }) {
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_b_correct" })
                   }
+                  checked={state.ans.answer_b_correct?"on":""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_b}
@@ -201,8 +229,9 @@ function Problem({socket, question }) {
                   name="answer_a_correct"
                   class="form-tick  cursor-pointer appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
                   onClick={() =>
-                    dispatch({ type: "ans", key: "answer_c_correct"})
+                    dispatch({ type: "ans", key: "answer_c_correct" })
                   }
+                  checked={state.ans.answer_c_correct?"on":""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_c}
@@ -219,8 +248,8 @@ function Problem({socket, question }) {
                   class="form-tick  cursor-pointer appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_d_correct" })
-
                   }
+                  checked={state.ans.answer_d_correct?"on":""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_d}
@@ -238,6 +267,7 @@ function Problem({socket, question }) {
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_e_correct" })
                   }
+                  checked={state.ans.answer_e_correct?"on":""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_e}
@@ -255,6 +285,7 @@ function Problem({socket, question }) {
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_f_correct" })
                   }
+                  checked={state.ans.answer_f_correct?"on":""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_f}
@@ -267,7 +298,8 @@ function Problem({socket, question }) {
             <button
               type="submit"
               class="py-2 px-4  bg-black hover:bg-yellow-400  hover:text-black   text-white w-full transition ease-in duration-200 text-center text-base font-semibold shadow-md     border-yellow-500 border-x-2 "
-              onClick={()=>CheckAns()}>
+              onClick={() => CheckAns()}
+            >
               Let's Check
             </button>
           </div>
