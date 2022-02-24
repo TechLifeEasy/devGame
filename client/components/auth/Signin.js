@@ -170,16 +170,7 @@ export default function Signin() {
         </div>
         {/* </div> */}
 
-        <div className="w-full pb-4 ml-auto text-gray-500 flex  justify-end px-4">
-          <a
-             href="/auth/login"
-            className="py-2 px-4  bg-black hover:bg-yellow-400  hover:text-black   text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md  border-yellow-500 border-x-2"
-
-            
-          >
-            Login Hear
-          </a>
-        </div>
+        
 
         <div className="w-full px-4 pb-4 ml-auto text-gray-500 md:w-2/3">
           <button
@@ -190,6 +181,17 @@ export default function Signin() {
           >
             Sign In
           </button>
+        </div>
+
+        <div className="w-full pb-4 ml-auto text-gray-500 flex  justify-end px-4">
+          <a
+             href="/auth/login"
+            className="py-2 px-4  bg-black hover:bg-yellow-400  hover:text-black   text-white  transition ease-in duration-200 text-center text-base font-semibold shadow-md  border-yellow-500 border-x-2"
+
+            
+          >
+            Login Here
+          </a>
         </div>
       </div>
     </section>
