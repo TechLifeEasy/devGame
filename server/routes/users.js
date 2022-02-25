@@ -125,6 +125,29 @@ router.get("/all",async (req,res)=>{
     console.log(error);
   }
 })
+
+router.put("/update",async (req,res)=>{
+  try {
+    const email=await req.body.email;
+    const rat=await req.body.rating;
+    const resp=await UserModal.findOneAndUpdate(
+      {email},
+      {
+        $inc:{rating:rat}
+      },{
+        useFindAndModify:false
+      }
+      )
+    
+    if(resp){
+      res.status(200).send("Done Updating Score")
+    }else{
+      res.status(404).send("Some Error Occurred in Updating Score");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+})
   
 
 module.exports = router;
