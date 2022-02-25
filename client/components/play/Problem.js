@@ -54,7 +54,8 @@ function Problem({ socket, question }) {
   const [chance, setChance] = useState(3);
   const [currque, setQue] = useState(question);
   useEffect(() => {
-    setQue(question);
+    // setQue(question);
+    getNewQue();
     initSocket();
   }, []);
 

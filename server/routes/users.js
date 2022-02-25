@@ -178,6 +178,22 @@ router.post('/matches',async (req,res)=>{
     return res.status(500).send(error);
     }
 })
+
+router.put('/incmatch',async(req,res)=>{
+  try {
+  const email=req.body.email;
+  const resp=await UserModal.findOneAndUpdate(
+    {email},
+    {$inc:{matches:1}},{useFindAndModify:false})
+    if(resp)
+    return res.status(200).send("Done Match Inc");
+    else
+    return res.status(404).send(`Some Error occured ${resp} `);
+    } 
+    catch (error) {
+      console.log(error);}
+    return res.status(404).send(error);
+})
   
 
 module.exports = router;
