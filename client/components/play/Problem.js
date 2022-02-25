@@ -2,7 +2,7 @@ import { React, useState } from "react";
 import EditorCode2 from "./code/Editor";
 const brcypt = require("bcryptjs");
 import { useReducer, useEffect } from "react";
-import { getQuiz } from "../../Api/Api";
+import { getQuiz,updateRating } from "../../Api/Api";
 
 const data = {
   title: "193. Valid Phone Numbers",
@@ -40,6 +40,15 @@ export default function Editor({ socket, question }) {
 //   );
 // }
 
+const update=async(rating)=>{
+  console.log("Fifth");
+  let email=JSON.parse(window.localStorage.getItem("info")).email
+  console.log(email);
+  updateRating({email,rating}).then((resp)=>{
+    console.log(resp);
+  }).catch((e)=>console.log(e))
+}
+
 function Problem({ socket, question }) {
   const [state, dispatch] = useReducer(reducer, init);
   const [chance, setChance] = useState(3);
@@ -48,15 +57,23 @@ function Problem({ socket, question }) {
     setQue(question);
     initSocket();
   }, []);
+
   socket.on("new_chance",(room_id,num)=>{
     if(window.localStorage.getItem("room_id")!=room_id)
     return;
-    
       setChance(num);
-    })
+    
+  })
 
+  socket.on("new_rating",(data)=>{
+    console.log("Third:",data.room_id);
+      if(window.localStorage.getItem("room_id")!==data.room_id )
+      return;
+      console.log("Fourth");
+      update(data.rating);
+      console.log("Hello Dhruvil");  
+  })
   function reducer(state, action) {
-    // console.log("state in",state);
     switch (action.type) {
       case "ans":
         const newAns = { ...state.ans, [action.key]: !state.ans[action.key] };
@@ -95,33 +112,58 @@ function Problem({ socket, question }) {
       console.log("change ans");
       dispatch({ type: "ansSo", data: data.data });
     });
-    
+  }
+
+  function getRating(diff){
+    switch(diff){
+      case "easy":
+        return 10;
+      case "medium":
+        return 20;
+      case "hard":
+        return 30;
+      default:
+        return 10;
+    }
   }
 
   const setSocketChance=(num)=>{
     const room_id=window.localStorage.getItem("room_id");
-    socket.emit("change_chance",(room_id,num));
+    socket.emit("change_chance",room_id,num);
   }
+
+  const setSocketRating=(rating)=>{
+    const room_id=window.localStorage.getItem("room_id");
+    console.log("First",room_id);
+    socket.emit("change_rating",{room_id,rating});
+  }
+
   async function CheckAns() {
     console.log(currque);
     const data = state.ans;
-
     for (let key in data) {
-      // console.log(data[key])
       data[key] = data[key] ? "true" : "false";
     }
     // console.log(JSON.stringify(data)==JSON.stringify(question.correct_answers2))
     // console.log(JSON.stringify(data))
     // console.log(JSON.stringify(question.correct_answers2))
 
+  
     const ans = await brcypt.compare(
       JSON.stringify(data),
       currque.correct_answers
+  
     );
     if (ans) {
+      let rating=getRating(currque.difficulty);
+      setSocketRating(rating);
+      let info=JSON.parse(window.localStorage.getItem("info"));
+      updateRating({email:info.email,rating}).then((resp)=>{
+      console.log(resp);
+      }).catch((e)=>console.log(e))
+      // // dispatch({ type: "reset", key: init })
       setChance(3);
       setSocketChance(3);
-      // dispatch({ type: "reset", key: init })
       console.log(state);
       getNewQue();
     } else {
