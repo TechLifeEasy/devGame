@@ -1,6 +1,6 @@
 import {React,useState,useEffect} from "react";
 import User from "../helper/UserPop";
-import {getMatches,getRating} from '../../Api/Api'
+import {getMatches,getRating,incMatches} from '../../Api/Api'
 export default function Profile() {
   const [name,setName]=useState();
   const [rating,setRating]=useState();
@@ -20,7 +20,6 @@ export default function Profile() {
       getRating({email}).then((resp)=>{
         setRating(resp.data.rating)
       }).catch((e)=>console.log(e))
-      
   },[])
   
   return (

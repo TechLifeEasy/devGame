@@ -26,7 +26,8 @@ const getUser = (data) => API.post("/users/byemail", data);
 const updateRating = (data) => API.put("/users/update", data);
 const getRating = (data) => API.post("/users/rating", data);
 const getMatches = (data) => API.post("/users/matches", data);
+const incMatches = (data) => API.put("/users/incmatch", data);
 const getAll = () => API.get("/users/all");
 const getQuiz = () => API.get("/puzzle");
 
-export { SignIn, SignUp, getOtp, getUser, getQuiz,getAll,updateRating,getMatches,getRating};
+export { SignIn, SignUp, getOtp, getUser, getQuiz,getAll,updateRating,getMatches,getRating,incMatches};

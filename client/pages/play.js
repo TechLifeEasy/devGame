@@ -3,6 +3,7 @@ import Index from "../components/play/Index";
 import { useEffect, useState, useReducer,useLayoutEffect } from "react";
 import { io } from "socket.io-client";
 import { BsInfo, BsWindowSidebar } from "react-icons/bs";
+import { incMatches } from "../Api/Api";
 
 const PORT = "http://127.0.0.1:8080/";
 
@@ -39,6 +40,13 @@ export default function Home() {
     socket.emit("join_room", window.localStorage.getItem("info"));
     socket.on("join_me", (room_id, data, question) => {
     console.log(room_id);
+    incMatches({email:data.email})
+    .then((resp)=>{
+      console.log(resp);
+    })
+    .catch((e)=>{
+      console.log(e);
+    })
     window.localStorage.setItem("room_id", room_id);
     dispatch({ type: "dataPartner", data: { ...data, room_id: room_id } });
     console.log(data);
