@@ -11,7 +11,8 @@ const UserSchema = new Schema({
     email: String,
     password: String,
     github: String,
-    rating:Number
+    rating:Number,
+    matches:Number
 }, { versionKey: false, timestamps: true });
 
 

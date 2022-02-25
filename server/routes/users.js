@@ -148,6 +148,36 @@ router.put("/update",async (req,res)=>{
     console.log(error);
   }
 })
+
+router.post('/rating',async (req,res)=>{
+  try {
+    const email=req.body.email;
+    console.log(req.body);
+    const user=await UserModal.findOne({email});
+    if(user){
+      return res.status(200).send({rating:user.rating})
+    }else{
+      return res.status(500).send('Some error occured in feching rating')
+    }
+  }catch (error) {
+    return res.status(500).send(error);
+    }
+});
+
+router.post('/matches',async (req,res)=>{
+  try {
+    const email=req.body.email;
+    console.log(req.body);
+    const user=await UserModal.findOne({email});
+    if(user){
+      return res.status(200).send({matches:user.matches})
+    }else{
+      return res.status(500).send('Some error occured in feching matches')
+    }
+  }catch (error) {
+    return res.status(500).send(error);
+    }
+})
   
 
 module.exports = router;
