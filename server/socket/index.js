@@ -49,15 +49,25 @@ function Main(server) {
     socket.on("disconnect", () => {
       console.log("Disconnected");
     });
+    
     socket.on("change_que",(que,room_id)=>{
       console.log("Inside server que",room_id);
       socket.broadcast.emit("new_question", que,room_id);
     })
-
     socket.on("AnsChange",(data)=>{
       console.log('call ans change')
       console.log(data)
       io.to(data.room_id).emit("changeAns", data);
+    })
+
+    socket.on("change_chance",(room_id,chance)=>{      
+      socket.broadcast.emit("new_chance",room_id,chance);
+    })
+
+    socket.on("change_rating",(data)=>{
+      console.log("Second",data.room_id);
+      let socket_id=data.room_id.split(" ")[0];
+      socket.broadcast.emit("new_rating",{rating:data.rating,room_id:data.room_id});
     })
   });
 }

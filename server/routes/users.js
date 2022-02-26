@@ -125,6 +125,75 @@ router.get("/all",async (req,res)=>{
     console.log(error);
   }
 })
+
+router.put("/update",async (req,res)=>{
+  try {
+    const email=await req.body.email;
+    const rat=await req.body.rating;
+    const resp=await UserModal.findOneAndUpdate(
+      {email},
+      {
+        $inc:{rating:rat}
+      },{
+        useFindAndModify:false
+      }
+      )
+    
+    if(resp){
+      res.status(200).send("Done Updating Score")
+    }else{
+      res.status(404).send("Some Error Occurred in Updating Score");
+    }
+  } catch (error) {
+    console.log(error);
+  }
+})
+
+router.post('/rating',async (req,res)=>{
+  try {
+    const email=req.body.email;
+    console.log(req.body);
+    const user=await UserModal.findOne({email});
+    if(user){
+      return res.status(200).send({rating:user.rating})
+    }else{
+      return res.status(500).send('Some error occured in feching rating')
+    }
+  }catch (error) {
+    return res.status(500).send(error);
+    }
+});
+
+router.post('/matches',async (req,res)=>{
+  try {
+    const email=req.body.email;
+    console.log(req.body);
+    const user=await UserModal.findOne({email});
+    if(user){
+      return res.status(200).send({matches:user.matches})
+    }else{
+      return res.status(500).send('Some error occured in feching matches')
+    }
+  }catch (error) {
+    return res.status(500).send(error);
+    }
+})
+
+router.put('/incmatch',async(req,res)=>{
+  try {
+  const email=req.body.email;
+  const resp=await UserModal.findOneAndUpdate(
+    {email},
+    {$inc:{matches:1}},{useFindAndModify:false})
+    if(resp)
+    return res.status(200).send("Done Match Inc");
+    else
+    return res.status(404).send(`Some Error occured ${resp} `);
+    } 
+    catch (error) {
+      console.log(error);}
+    return res.status(404).send(error);
+})
   
 
 module.exports = router;
