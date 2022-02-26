@@ -1,11 +1,13 @@
 import {React,useEffect,useState} from "react";
 import User from "../helper/UserPop";
 import {getAll} from '../../Api/Api'
+import { getUrl } from "../helper/find";
 
 export default function Topers(){
   const [data, setdata] = useState([]);
   const [top3,setTop3]=useState([]);
   const [all,setAll] =useState(false);
+  const [userAvt, setUrl] = useState(getUrl());
   useEffect(() => {
     getAll().then((dt)=>{
       let newData=[]
@@ -73,7 +75,7 @@ function UserOne({name,rating}){
             <a class="block relative">
               <img
                 alt="profil"
-                src="https://zeelcodder.tech/images/home/zeel.jpeg"
+                src={user}
                 class="mx-auto object-cover rounded-full h-16 w-16 "
               />
             </a>
