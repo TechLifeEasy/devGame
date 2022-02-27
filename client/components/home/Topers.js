@@ -7,7 +7,7 @@ export default function Topers(){
   const [data, setdata] = useState([]);
   const [top3,setTop3]=useState([]);
   const [all,setAll] =useState(false);
-  const [userAvt, setUrl] = useState(getUrl());
+ 
   useEffect(() => {
     getAll().then((dt)=>{
       let newData=[]
@@ -38,7 +38,7 @@ export default function Topers(){
       
       {(all?data:top3).map((dt)=>{
         return(
-      <UserOne name={dt.name} rating={dt.rating}></UserOne>)
+      <UserOne  name={dt.name} rating={dt.rating}></UserOne>)
       })}
      </div>
 
@@ -62,6 +62,7 @@ export default function Topers(){
 // }
 
 function UserOne({name,rating}){
+  const [user, setUrl] = useState(getUrl());
   return (
     <div class=" relative shadow-lg rounded-2xl w-64  text-black  dark:bg-gray-800 p-4 bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out cursor-pointer">
       

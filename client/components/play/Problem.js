@@ -2,7 +2,9 @@ import { React, useState } from "react";
 import EditorCode2 from "./code/Editor";
 const brcypt = require("bcryptjs");
 import { useReducer, useEffect } from "react";
-import { getQuiz,updateRating } from "../../Api/Api";
+import { getQuiz, updateRating } from "../../Api/Api";
+const jwt = require("jsonwebtoken");
+// import mongoose from 'mongoose';
 
 const data = {
   title: "193. Valid Phone Numbers",
@@ -22,10 +24,10 @@ const init = {
   },
 };
 
-export default function Editor({ socket, question }) {
+export default function Editor({ socket, question,dataPartner }) {
   return (
     <div className="w-2/4 flex-2 py-4 overflow-auto h-full p-4">
-      <Problem socket={socket} question={question}></Problem>
+      <Problem socket={socket} question={question} dataPartner={dataPartner}></Problem>
       {/* <EditorCode></EditorCode> */}
     </div>
   );
@@ -40,40 +42,44 @@ export default function Editor({ socket, question }) {
 //   );
 // }
 
-const update=async(rating)=>{
-  console.log("Fifth");
-  let email=JSON.parse(window.localStorage.getItem("info")).email
-  console.log(email);
-  updateRating({email,rating}).then((resp)=>{
-    console.log(resp);
-  }).catch((e)=>console.log(e))
-}
+const update = async (rating) => {
+  //console.log("Fifth");
+  let email = JSON.parse(window.localStorage.getItem("info")).email;
+  //console.log(email);
+  updateRating({ email, rating })
+    .then((resp) => {
+      //console.log(resp);
+    })
+    .catch((e) => console.log(e));
+};
 
-function Problem({ socket, question }) {
+function Problem({ socket, question ,dataPartner}) {
   const [state, dispatch] = useReducer(reducer, init);
   const [chance, setChance] = useState(3);
   const [currque, setQue] = useState(question);
   useEffect(() => {
     // setQue(question);
-    getNewQue();
+    // getNewQue();
     initSocket();
   }, []);
+  useEffect(() => {
+    setQue(question);
+    // getNewQue();
+    // initSocket();
+  }, [question]);
 
-  socket.on("new_chance",(room_id,num)=>{
-    if(window.localStorage.getItem("room_id")!=room_id)
-    return;
-      setChance(num);
-    
-  })
+  socket.on("new_chance", (room_id, num) => {
+    if (window.localStorage.getItem("room_id") != room_id) return;
+    setChance(num);
+  });
 
-  socket.on("new_rating",(data)=>{
-    console.log("Third:",data.room_id);
-      if(window.localStorage.getItem("room_id")!==data.room_id )
-      return;
-      console.log("Fourth");
-      update(data.rating);
-      console.log("Hello Dhruvil");  
-  })
+  socket.on("new_rating", (data) => {
+    //console.log("Third:",data.room_id);
+    if (window.localStorage.getItem("room_id") !== data.room_id) return;
+    //console.log("Fourth");
+    update(data.rating);
+    //console.log("Hello Dhruvil");
+  });
   function reducer(state, action) {
     switch (action.type) {
       case "ans":
@@ -84,11 +90,11 @@ function Problem({ socket, question }) {
         });
         return {
           ...state,
-          ans: { ...state.ans, [action.key]: !state.ans[action.key] },
+          ans: newAns,
         };
       case "ansSo":
-        console.log(state.ans)
-        console.log(action.data)
+        //console.log(state.ans)
+        //console.log(action.data)
         return {
           ...state,
           ans: action.data,
@@ -106,17 +112,36 @@ function Problem({ socket, question }) {
   function initSocket() {
     socket.on("new_question", (que, room_id) => {
       if (window.localStorage.getItem("room_id") !== room_id) return;
-      console.log("Inside Client que");
+      //console.log("Inside Client que");
       setQue(que);
     });
     socket.on("changeAns", (data) => {
-      console.log("change ans");
+      //console.log("change ans");
       dispatch({ type: "ansSo", data: data.data });
     });
+
+    socket.on("didd");
+
+    socket.on("left", (data) => {
+      window.location.href = "/";
+    });
+
+    socket.on("disconnect", () => {
+      left()
+    });
+
+    socket.on("user-net-gaya",(data)=>{
+
+      if(data.id==dataPartner.socket_id){
+        alert('patens left')
+        window.location.href='/'
+      }
+
+    })
   }
 
-  function getRating(diff){
-    switch(diff){
+  function getRating(diff) {
+    switch (diff) {
       case "easy":
         return 10;
       case "medium":
@@ -128,72 +153,90 @@ function Problem({ socket, question }) {
     }
   }
 
-  const setSocketChance=(num)=>{
-    const room_id=window.localStorage.getItem("room_id");
-    socket.emit("change_chance",room_id,num);
+  const setSocketChance = (num) => {
+    const room_id = window.localStorage.getItem("room_id");
+    socket.emit("change_chance", room_id, num);
+  };
+
+  const setSocketRating = (rating) => {
+    const room_id = window.localStorage.getItem("room_id");
+    //console.log("First",room_id);
+    socket.emit("change_rating", { room_id, rating });
+  };
+
+  function left() {
+    const room_id = window.localStorage.getItem("room_id");
+    socket.emit("left-room", { room_id: room_id });
   }
 
-  const setSocketRating=(rating)=>{
-    const room_id=window.localStorage.getItem("room_id");
-    console.log("First",room_id);
-    socket.emit("change_rating",{room_id,rating});
+  function issame(d1, d2) {
+    for (let key in d1) {
+      console.log(`<h1>${d1[key] + " " + d2[key]}</h1>`);
+      if (d1[key] != d2[key]) return false;
+    }
+    return true;
   }
-
   async function CheckAns() {
-    console.log(currque);
-    const data = state.ans;
+    //console.log(currque);
+    const data = { ...state.ans };
     for (let key in data) {
       data[key] = data[key] ? "true" : "false";
     }
-    // console.log(JSON.stringify(data)==JSON.stringify(question.correct_answers2))
-    // console.log(JSON.stringify(data))
-    // console.log(JSON.stringify(question.correct_answers2))
+    // //console.log(JSON.stringify(data)==JSON.stringify(question.correct_answers2))
+    // //console.log(JSON.stringify(data))
+    // //console.log(JSON.stringify(question.correct_answers2))
 
-  
-    const ans = await brcypt.compare(
-      JSON.stringify(data),
-      currque.correct_answers
-  
+    const ans_ac = jwt.verify(
+      currque.correct_answers,
+      process.env.NEXT_PUBLIC_S
     );
-    if (ans) {
-      let rating=getRating(currque.difficulty);
+    console.log(ans_ac);
+    console.log(data);
+    if (issame(ans_ac, data)) {
+      console.log("same");
+      let rating = getRating(currque.difficulty);
       setSocketRating(rating);
-      let info=JSON.parse(window.localStorage.getItem("info"));
-      updateRating({email:info.email,rating}).then((resp)=>{
-      console.log(resp);
-      }).catch((e)=>console.log(e))
+      let info = JSON.parse(window.localStorage.getItem("info"));
+      updateRating({ email: info.email, rating })
+        .then((resp) => {
+          //console.log(resp);
+          alert("solve the question nice");
+          const room_id = window.localStorage.getItem("room_id");
+          socket.emit("left-room", { room_id: room_id });
+          window.location.href = "/";
+        })
+        .catch((e) => console.log(e));
       // // dispatch({ type: "reset", key: init })
-      setChance(3);
-      setSocketChance(3);
-      console.log(state);
-      getNewQue();
     } else {
       setChance(chance - 1);
-      setSocketChance(chance-1);
+      setSocketChance(chance - 1);
       if (chance == 0) {
         setChance(3);
         setSocketChance(3);
-        alert("You've used all your chances\n Get Ready For New Question");
-        getNewQue();
+        alert("You've used all your chances\n better luck next time");
+        // getNewQue();
+        const room_id = window.localStorage.getItem("room_id");
+        socket.emit("left-room", { room_id: room_id });
+        window.location.href = "/";
+
         //  dispatch({ type: "reset", key: init })
-        console.log(state);
+        //console.log(state);
       }
     }
     // if(ans){
-    alert(ans);
+    // alert(ans_ac);
 
     // }
   }
   const getNewQue = async () => {
     try {
-
       socket.emit("AnsChange", {
         data: init.ans,
         room_id: window.localStorage.getItem("room_id"),
       });
       getQuiz()
         .then((que) => {
-          console.log(que);
+          //console.log(que);
           setQue(que.data);
           socket.emit(
             "change_que",
@@ -205,7 +248,7 @@ function Problem({ socket, question }) {
           console.log(e);
         });
     } catch (error) {
-      console.log(error);
+      //console.log(error);
     }
   };
 
@@ -246,11 +289,11 @@ function Problem({ socket, question }) {
                 <input
                   type="checkbox"
                   name="answer_a_correct"
-                  class="form-tick  cursor-pointer appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
+                  class="cursor-pointer bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_a_correct" })
                   }
-                  checked={state.ans.answer_a_correct?"on":""}
+                  checked={state.ans.answer_a_correct ? "on" : ""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_a}
@@ -263,12 +306,12 @@ function Problem({ socket, question }) {
               <label class="flex items-center space-x-3 mb-3">
                 <input
                   type="checkbox"
-                  name="answer_a_correct"
-                  class="form-tick  cursor-pointer appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
+                  name="answer_b_correct"
+                  class="cursor-pointer bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_b_correct" })
                   }
-                  checked={state.ans.answer_b_correct?"on":""}
+                  checked={state.ans.answer_b_correct ? "on" : ""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_b}
@@ -281,12 +324,12 @@ function Problem({ socket, question }) {
               <label class="flex items-center space-x-3 mb-3">
                 <input
                   type="checkbox"
-                  name="answer_a_correct"
-                  class="form-tick  cursor-pointer appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
+                  name="answer_c_correct"
+                  class="cursor-pointer bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_c_correct" })
                   }
-                  checked={state.ans.answer_c_correct?"on":""}
+                  checked={state.ans.answer_c_correct ? "on" : ""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_c}
@@ -299,12 +342,12 @@ function Problem({ socket, question }) {
               <label class="flex items-center space-x-3 mb-3">
                 <input
                   type="checkbox"
-                  name="answer_a_correct"
-                  class="form-tick  cursor-pointer appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
+                  name="answer_d_correct"
+                  class="cursor-pointer bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_d_correct" })
                   }
-                  checked={state.ans.answer_d_correct?"on":""}
+                  checked={state.ans.answer_d_correct ? "on" : ""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_d}
@@ -317,12 +360,12 @@ function Problem({ socket, question }) {
               <label class="flex items-center space-x-3 mb-3">
                 <input
                   type="checkbox"
-                  name="answer_a_correct"
-                  class="form-tick  cursor-pointer appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
+                  name="answer_e_correct"
+                  class="cursor-pointer bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_e_correct" })
                   }
-                  checked={state.ans.answer_e_correct?"on":""}
+                  checked={state.ans.answer_e_correct ? "on" : ""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_e}
@@ -335,12 +378,12 @@ function Problem({ socket, question }) {
               <label class="flex items-center space-x-3 mb-3">
                 <input
                   type="checkbox"
-                  name="answer_a_correct"
-                  class="form-tick  cursor-pointer appearance-none bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
+                  name="answer_f_correct"
+                  class="cursor-pointer bg-white bg-check h-6 w-6 border border-gray-300 rounded-md checked:bg-yellow-500 checked:border-transparent focus:outline-none"
                   onClick={() =>
                     dispatch({ type: "ans", key: "answer_f_correct" })
                   }
-                  checked={state.ans.answer_f_correct?"on":""}
+                  checked={state.ans.answer_f_correct ? "on" : ""}
                 />
                 <span class=" dark:text-white font-normal h-30 overflow-auto ">
                   {currque.answers.answer_f}

@@ -128,8 +128,8 @@ router.get("/all",async (req,res)=>{
 
 router.put("/update",async (req,res)=>{
   try {
-    const email=await req.body.email;
-    const rat=await req.body.rating;
+    const email=req.body.email;
+    const rat=+req.body.rating;
     const resp=await UserModal.findOneAndUpdate(
       {email},
       {

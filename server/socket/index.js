@@ -3,6 +3,7 @@ const { getRanDomQuiz } = require("../db/Puzzle/index");
 
 function Main(server) {
   let queue = [];
+  let map=new Set();
   const io = new Server(server, {
     cors: {
       origin: "*",
@@ -16,11 +17,21 @@ function Main(server) {
       let info = JSON.parse(data);
       info.socket_id = socket.id;
 
+      console.log(map)
+
       if (queue.length === 0) {
         info.room_id = socket.id + " " + generateOTP();
         queue.push(info);
+        map.add(info._id);
       } else {
+
+        if(map.has(info._id)){
+          socket.emit("Leave_me");
+          return;
+        }
+
         let user = queue.pop();
+        map.delete(user._id);
         info.room_id = user.room_id;
         getRanDomQuiz()
           .then((data) => {
@@ -69,6 +80,14 @@ function Main(server) {
       let socket_id=data.room_id.split(" ")[0];
       socket.broadcast.emit("new_rating",{rating:data.rating,room_id:data.room_id});
     })
+
+    socket.on("left-room",(data)=>{
+      io.to(data.room_id).emit("left",data);
+    })
+
+    socket.on("disconnect", () => {
+      io.emit("user-net-gaya",{id:socket.id})
+    });
   });
 }
 

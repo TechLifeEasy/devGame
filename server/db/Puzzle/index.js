@@ -1,6 +1,6 @@
 const axios = require("axios");
-const brcypt = require("bcryptjs");
-
+// const brcypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const Api = axios.create({
   baseURL: "https://quizapi.io/api/v1",
   headers: { "X-Api-Key": process.env.pu_Api },
@@ -23,9 +23,10 @@ async function getRanDomQuiz(){
     const data = await Api.get("/questions?limit=1");
     // console.log(data.data)
 
-    const ans = await brcypt.hash(JSON.stringify(data.data[0].correct_answers), 5);
+ 
+    const token = await jwt.sign(JSON.stringify(data.data[0].correct_answers), process.env.Secrete);
 
-    return { ...data.data[0], correct_answers2:data.data[0].correct_answers,correct_answers: ans, };
+    return { ...data.data[0], correct_answers2:data.data[0].correct_answers,correct_answers: token };
 
 }
 

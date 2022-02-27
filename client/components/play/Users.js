@@ -1,17 +1,75 @@
 import React, { useEffect, useState } from "react";
-import User from "../helper/UserPop";
+import User from "../helper/UserVideoPop";
 import { GoHubot } from "react-icons/go";
 
-export default function Users({ state }) {
+export default function Users(props) {
   const data = { isPlay: true };
   const [me, setMe] = useState(null);
+
+
+
+  function addVideoStream(video,mediaStream){
+   
+    video.srcObject = mediaStream;
+    video.onloadedmetadata = function (e) {
+      video.play();
+    };
+  }
+  function startStreamedVideo() {
+  
+    // Prefer camera resolution nearest to 1280x720.
+    let constraints = { audio: true, video: { width: 1280, height: 720 } };
+    const peer=props.peer;
+
+
+    navigator.mediaDevices
+      .getUserMedia(constraints)
+      .then(function (mediaStream) {
+        var video = document.querySelector(".user-vm");
+        addVideoStream(video,mediaStream);
+
+        const id=JSON.parse(window.localStorage.getItem("info"))._id;
+
+     
+          console.log('call peer',id)
+
+          peer.call(props.state.dataPartner.room_id, mediaStream);
+          
+          peer.on("call", (call) => {
+          call.answer(mediaStream);
+          console.log('call me')
+          const video2 = document.createElement(".user-v");
+          call.on("stream", (userVideoStream) => {
+            addVideoStream(video2, userVideoStream);
+          });
+        });
+      
+      })
+      // .catch(function (err) {
+      //   console.log(err.name + ": " + err.message);
+      // }); // always check for errors at the end.
+  
+}
+
+  function stopStreamedVideo() {
+    var video = document.querySelector(".user-vm");
+    const stream = video.srcObject;
+    const tracks = stream.getTracks();
+    console.log(tracks);
+
+    tracks.forEach(function (track) {
+      track.stop();
+    });
+
+    video.srcObject = null;
+  }
 
   useEffect(() => {
     setMe(JSON.parse(window.localStorage.getItem("info")));
   }, []);
 
-  if(me==null){
-    return <></>
+  if (me == null) {
+    return <></>;
   }
 
   return (
@@ -20,13 +78,29 @@ export default function Users({ state }) {
         <GoHubot></GoHubot>
         <div>devGame</div>
       </div>
-    
-        <User {...data} {...me} isMe={true}></User>
-      
+
+      <User
+        {...data}
+        {...me}
+        socket={props.socket}
+        peer={props.peer}
+        isMe={true}
+        startStreamedVideo={startStreamedVideo}
+        stopStreamedVideo={stopStreamedVideo}
+
+      ></User>
+
       <div className="text-2xl text-yellow-500">&</div>
-   
-        <User {...data} {...state.dataPartner} isMe={false}></User>
-      
+
+      <User
+        {...data}
+        socket={props.socket}
+        {...props.state.dataPartner}
+        peer={props.peer}
+        isMe={false}
+        startStreamedVideo={startStreamedVideo}
+        stopStreamedVideo={stopStreamedVideo}
+      ></User>
     </div>
   );
 }
