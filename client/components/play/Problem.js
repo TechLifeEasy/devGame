@@ -43,11 +43,13 @@ export default function Editor({ socket, question,dataPartner }) {
 // }
 
 const update = async (rating) => {
-  //console.log("Fifth");
+  console.log("update my output");
   let email = JSON.parse(window.localStorage.getItem("info")).email;
   //console.log(email);
+  alert("solve the question nice");
   updateRating({ email, rating })
     .then((resp) => {
+      // alert("solve the question nice");
       //console.log(resp);
     })
     .catch((e) => console.log(e));
@@ -68,18 +70,7 @@ function Problem({ socket, question ,dataPartner}) {
     // initSocket();
   }, [question]);
 
-  socket.on("new_chance", (room_id, num) => {
-    if (window.localStorage.getItem("room_id") != room_id) return;
-    setChance(num);
-  });
-
-  socket.on("new_rating", (data) => {
-    //console.log("Third:",data.room_id);
-    if (window.localStorage.getItem("room_id") !== data.room_id) return;
-    //console.log("Fourth");
-    update(data.rating);
-    //console.log("Hello Dhruvil");
-  });
+ 
   function reducer(state, action) {
     switch (action.type) {
       case "ans":
@@ -120,7 +111,20 @@ function Problem({ socket, question ,dataPartner}) {
       dispatch({ type: "ansSo", data: data.data });
     });
 
-    socket.on("didd");
+    socket.on("new_chance", (room_id, num) => {
+      // if (window.localStorage.getItem("room_id") != room_id) return;
+      setChance(num);
+    });
+  
+    socket.on("new_rating", (data) => {
+      //console.log("Third:",data.room_id);
+      // if (window.localStorage.getItem("room_id") !== data.room_id) return;
+      //console.log("Fourth");
+      update(data.rating);
+      //console.log("Hello Dhruvil");
+    });
+
+    // socket.on("didd");
 
     socket.on("left", (data) => {
       window.location.href = "/";
@@ -197,30 +201,33 @@ function Problem({ socket, question ,dataPartner}) {
       let rating = getRating(currque.difficulty);
       setSocketRating(rating);
       let info = JSON.parse(window.localStorage.getItem("info"));
-      updateRating({ email: info.email, rating })
-        .then((resp) => {
+      // updateRating({ email: info.email, rating })
+      //   .then((resp) => {
           //console.log(resp);
           alert("solve the question nice");
           const room_id = window.localStorage.getItem("room_id");
           socket.emit("left-room", { room_id: room_id });
           window.location.href = "/";
-        })
-        .catch((e) => console.log(e));
+        // })
+        // .catch((e) => console.log(e));
       // // dispatch({ type: "reset", key: init })
     } else {
       setChance(chance - 1);
       setSocketChance(chance - 1);
-      if (chance == 0) {
-        setChance(3);
-        setSocketChance(3);
+      if (chance-1 == 0) {
+      
         alert("You've used all your chances\n better luck next time");
         // getNewQue();
         const room_id = window.localStorage.getItem("room_id");
         socket.emit("left-room", { room_id: room_id });
         window.location.href = "/";
+        setChance(3);
+        setSocketChance(3);
 
         //  dispatch({ type: "reset", key: init })
         //console.log(state);
+      }else{
+        alert(`${chance-1} move remains`)
       }
     }
     // if(ans){

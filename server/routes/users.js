@@ -126,14 +126,25 @@ router.get("/all",async (req,res)=>{
   }
 })
 
-router.put("/update",async (req,res)=>{
+router.post("/update",async (req,res)=>{
   try {
     const email=req.body.email;
     const rat=+req.body.rating;
+    console.log(rat)
     const resp=await UserModal.findOneAndUpdate(
       {email},
       {
-        $inc:{rating:rat}
+        $inc:{rating:rat},
+      
+      },{
+        useFindAndModify:false
+      }
+      )
+    await UserModal.findOneAndUpdate(
+      {email},
+      {
+      
+        $inc:{matches:1}
       },{
         useFindAndModify:false
       }

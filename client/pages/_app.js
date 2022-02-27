@@ -12,12 +12,19 @@ function MyApp({ Component, pageProps }) {
   
   const [popText,setPop]=useState(false);
   const [isLoad,setLoad]=useState(false);
+
+  const handle={
+    popText:popText,
+    isLoad:isLoad,
+    setLoad:setLoad,
+    setPop:setPop
+  }
   
   
   return (
     <div className="bg-black text-white">
      
-      <Component {...pageProps} />
+      <Component {...pageProps} {...handle} />
 
       {
 

@@ -23,7 +23,7 @@ const SignUp = (data) => API.post("/users/signup", data);
 const SignIn = (data) => API.post("/users/signin", data);
 const getOtp = (data) => API.post("/users/otp", data);
 const getUser = (data) => API.post("/users/byemail", data);
-const updateRating = (data) => API.put("/users/update", data);
+const updateRating = (data) => API.post("/users/update", data);
 const getRating = (data) => API.post("/users/rating", data);
 const getMatches = (data) => API.post("/users/matches", data);
 const incMatches = (data) => API.put("/users/incmatch", data);
