@@ -8,7 +8,7 @@ import {
   import { getUrl } from "./find";
   import { useEffect, useState } from "react";
   
-  function User({ isPlay, name,isVideo, email,peer2, isMe, socket, peer,StartStrem,stopStreamedVideo }) {
+  function User({ isPlay, name, isMe}) {
     
     const [userAvt, setUrl] = useState(getUrl());
   
@@ -26,12 +26,8 @@ import {
     return (
       <div class=" relative shadow-lg rounded-2xl w-64  text-black  dark:bg-gray-800 p-4 bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out cursor-pointer">
         
-          <video muted={isMe?'ze':''} autoPlay loop className={` h-48 ${isMe?'user-vm':'user-v'} ${!isVideo?'hidden':'visible'}`}>
-            <source src="" type="video/webm" />
-            Sorry, your browser doesn't support embedded videos.
-          </video>
-        
-          <div  className={`${isVideo?'hidden':'visible'}`}>
+    
+          <div  >
             <img 
               alt="profil"
               src="https://images.unsplash.com/photo-1581147543324-6a0a08a48ce5?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80"

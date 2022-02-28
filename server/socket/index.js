@@ -25,10 +25,10 @@ function Main(server) {
         map.add(info._id);
       } else {
 
-        // if(map.has(info._id)){
-        //   socket.emit("Leave_me");
-        //   return;
-        // }
+        if(map.has(info._id)){
+          socket.emit("Leave_me");
+          return;
+        }
 
         let user = queue.pop();
         map.delete(user._id);

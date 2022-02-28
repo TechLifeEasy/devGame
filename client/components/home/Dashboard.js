@@ -16,7 +16,7 @@ export default function Dashboard() {
         <Topers></Topers>
       </div>
       <div className="text-center text-white">
-        <h1 className="text-2xl"> How To Play?</h1>
+        <h1 className="text-2xl"> How To Play game?</h1>
         <Path></Path>
       </div>
    

@@ -18,10 +18,10 @@ export default function Users(props) {
 
     setMe(JSON.parse(window.localStorage.getItem("info")));
     
-    socket.on("hey", (data) => {
-      acceptCall(data.signal,data.from)
-    });
-    StartStrem()
+  //   socket.on("hey", (data) => {
+  //     acceptCall(data.signal,data.from)
+  //   });
+  //   StartStrem()
 
   }, []);
 
@@ -133,7 +133,7 @@ export default function Users(props) {
         isMe={true}
         StartStrem={StartStrem}
         stopStreamedVideo={stopStreamedVideo}
-        isVideo={isVideoMe}
+      
       ></User>
 
       <div className="text-2xl text-yellow-500">&</div>
@@ -145,7 +145,7 @@ export default function Users(props) {
         isMe={false}
         StartStrem={StartStrem}
         stopStreamedVideo={stopStreamedVideo}
-        isVideo={isVideo}
+        
       ></User>
     </div>
   );
