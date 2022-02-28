@@ -25,10 +25,10 @@ function Main(server) {
         map.add(info._id);
       } else {
 
-        if(map.has(info._id)){
-          socket.emit("Leave_me");
-          return;
-        }
+        // if(map.has(info._id)){
+        //   socket.emit("Leave_me");
+        //   return;
+        // }
 
         let user = queue.pop();
         map.delete(user._id);
@@ -88,6 +88,16 @@ function Main(server) {
     socket.on("disconnect", () => {
       io.emit("user-net-gaya",{id:socket.id})
     });
+
+    
+
+    socket.on("callUser", (data) => {
+        io.to(data.userToCall).emit('hey', {signal: data.signalData, from: socket.id});
+    })
+
+    socket.on("acceptCall", (data) => {
+        io.to(data.to).emit('callAccepted', data.signal);
+    })
   });
 }
 

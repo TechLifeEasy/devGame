@@ -4,7 +4,7 @@ import { useEffect, useState, useReducer,useLayoutEffect } from "react";
 import { io } from "socket.io-client";
 import { BsInfo, BsWindowSidebar } from "react-icons/bs";
 import { incMatches } from "../Api/Api";
-// import Peer from 'peerjs';
+
 const PORT = "http://127.0.0.1:8080/";
 
 const inits = {
@@ -33,8 +33,7 @@ function reducer(state, action) {
 export default function Home(props) {
   const [state, dispatch] = useReducer(reducer, inits);
   const [socket, setSocket] = useState(null);
-  const [peer, setPeer] = useState(null);
-  
+
      function init() {
     let socket = io(PORT);
 
@@ -47,14 +46,7 @@ export default function Home(props) {
     socket.on("join_me", (room_id, data, question) => {
     console.log(room_id);
 
-      var Peer2 = new Peer(room_id, {
-        path: "/peerjs",
-        host: "/",
-        port: "3030",
-        });
-      console.log(Peer2)
-      setPeer(Peer2);
-  
+
     incMatches({email:data.email})
     .then((resp)=>{
       console.log(resp);
@@ -78,11 +70,11 @@ export default function Home(props) {
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-black text-white">
-      <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+      {/* <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script> */}
       {state.isFind ? (
         <PreMatch find={init}></PreMatch>
       ) : (
-        <Index state={state} {...props} dispatch={dispatch} peer={peer} socket={socket}></Index>
+        <Index state={state} {...props} dispatch={dispatch} socket={socket}></Index>
       )}
     </div>
   );

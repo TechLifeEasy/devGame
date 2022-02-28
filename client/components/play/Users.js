@@ -1,55 +1,106 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import User from "../helper/UserVideoPop";
 import { GoHubot } from "react-icons/go";
+var Peer = require("simple-peer");
 
 export default function Users(props) {
   const data = { isPlay: true };
   const [me, setMe] = useState(null);
 
 
+  const [isVideoMe, setIsVideoMe] = useState(false);
+  const [isVideo, setIsVideo] = useState(false);
+  const [socket, setSoc] = useState( props.socket);
+  const [stream, setStream] = useState();
 
-  function addVideoStream(video,mediaStream){
+  useEffect(() => {
    
+
+    setMe(JSON.parse(window.localStorage.getItem("info")));
+    
+    socket.on("hey", (data) => {
+      acceptCall(data.signal,data.from)
+    });
+    StartStrem()
+
+  }, []);
+
+  function StartStrem() {
+    navigator.mediaDevices
+      .getUserMedia({
+        video: true,
+        audio: true,
+      })
+      .then((stream)=>{
+        setStream(stream);
+        callPeer(props.state.dataPartner.socket_id,stream)
+      })
+      .catch(() => {});
+  }
+ 
+
+  function callPeer(id,stream) {
+    const peer = new Peer({
+      initiator: true,
+      trickle: false,
+      stream: stream,
+    });
+
+    peer.on("signal", (data) => {
+      socket.emit("callUser", {
+        userToCall: id,
+        signalData: data,
+      });
+    });
+
+    var video = document.querySelector(".user-vm");
+    addVideoStream(video, stream);
+    setIsVideoMe(true);
+    peer.on("stream", (stream) => {
+      var video = document.querySelector(".user-v");
+      addVideoStream(video, stream);
+      setIsVideo(true);
+    });
+    
+    socket.on("callAccepted", signal => {     
+      peer.signal(signal);
+    })
+    
+  }
+
+  function acceptCall(s,f) {
+    // setCallAccepted(true);
+
+    
+    const peer = new Peer({
+      initiator: false,
+      trickle: false,
+      stream: stream,
+    });
+
+    peer.on("signal", (data) => {
+      socket.emit("acceptCall", { signal: data, to: f });
+    });
+
+    peer.on("stream", (stream) => {
+      var video2 = document.querySelector(".user-v");
+      setIsVideo(true);
+      // console.log(video2);
+      addVideoStream(video2, stream);
+      setIsVideo(true)
+    });
+
+    peer.signal(s);
+    
+  }
+
+
+  function addVideoStream(video, mediaStream) {
     video.srcObject = mediaStream;
     video.onloadedmetadata = function (e) {
       video.play();
     };
   }
-  function startStreamedVideo() {
-  
-    // Prefer camera resolution nearest to 1280x720.
-    let constraints = { audio: true, video: { width: 1280, height: 720 } };
-    const peer=props.peer;
-
-
-    navigator.mediaDevices
-      .getUserMedia(constraints)
-      .then(function (mediaStream) {
-        var video = document.querySelector(".user-vm");
-        addVideoStream(video,mediaStream);
-
-        const id=JSON.parse(window.localStorage.getItem("info"))._id;
-
-     
-          console.log('call peer',id)
-
-          peer.call(props.state.dataPartner.room_id, mediaStream);
-          
-          peer.on("call", (call) => {
-          call.answer(mediaStream);
-          console.log('call me')
-          const video2 = document.createElement(".user-v");
-          call.on("stream", (userVideoStream) => {
-            addVideoStream(video2, userVideoStream);
-          });
-        });
-      
-      })
-      // .catch(function (err) {
-      //   console.log(err.name + ": " + err.message);
-      // }); // always check for errors at the end.
-  
-}
 
   function stopStreamedVideo() {
     var video = document.querySelector(".user-vm");
@@ -63,10 +114,6 @@ export default function Users(props) {
 
     video.srcObject = null;
   }
-
-  useEffect(() => {
-    setMe(JSON.parse(window.localStorage.getItem("info")));
-  }, []);
 
   if (me == null) {
     return <></>;
@@ -83,11 +130,10 @@ export default function Users(props) {
         {...data}
         {...me}
         socket={props.socket}
-        peer={props.peer}
         isMe={true}
-        startStreamedVideo={startStreamedVideo}
+        StartStrem={StartStrem}
         stopStreamedVideo={stopStreamedVideo}
-
+        isVideo={isVideoMe}
       ></User>
 
       <div className="text-2xl text-yellow-500">&</div>
@@ -96,10 +142,10 @@ export default function Users(props) {
         {...data}
         socket={props.socket}
         {...props.state.dataPartner}
-        peer={props.peer}
         isMe={false}
-        startStreamedVideo={startStreamedVideo}
+        StartStrem={StartStrem}
         stopStreamedVideo={stopStreamedVideo}
+        isVideo={isVideo}
       ></User>
     </div>
   );
