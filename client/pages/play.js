@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import { BsInfo, BsWindowSidebar } from "react-icons/bs";
 import { incMatches } from "../Api/Api";
 
-const PORT = "http://127.0.0.1:8080/";
+const PORT = process.env.NEXT_PUBLIC_WebLink;
 
 const inits = {
   isFind: true,
