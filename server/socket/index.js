@@ -53,13 +53,13 @@ function Main(server) {
 
     socket.on("mess", (data) => {
       console.log('call mess');
-      console.log(data.room_id);
+      console.log(data);
       io.to(data.room_id).emit("message_other", data);
     });
 
-    socket.on("disconnect", () => {
-      console.log("Disconnected");
-    });
+    // socket.on("disconnect", () => {
+    //   console.log("Disconnected");
+    // });
     
     socket.on("change_que",(que,room_id)=>{
       console.log("Inside server que",room_id);
@@ -91,13 +91,13 @@ function Main(server) {
 
     
 
-    socket.on("callUser", (data) => {
-        io.to(data.userToCall).emit('hey', {signal: data.signalData, from: socket.id});
-    })
+    // socket.on("callUser", (data) => {
+    //     io.to(data.userToCall).emit('hey', {signal: data.signalData, from: socket.id});
+    // })
 
-    socket.on("acceptCall", (data) => {
-        io.to(data.to).emit('callAccepted', data.signal);
-    })
+    // socket.on("acceptCall", (data) => {
+    //     io.to(data.to).emit('callAccepted', data.signal);
+    // })
   });
 }
 
