@@ -80,15 +80,20 @@ export default function Signin() {
       // if(resp.status===200){
       //   setOtp(resp.data.otp)
       // }
+      setLoad(true);
       // const otp=otpGenerator.generate(6, { upperCaseAlphabets: false, specialChars: false });
       const otp=generateOTP()
       emailjs.send('service_vw4pxol', 'template_muhwzc5', {otp:otp,email:state.email}, 'user_XSA0W9Igma8yKzhDg8kJ3')
       .then((result) => {
           console.log(result.text);
           setOtp(otp)
+          alert("OPT send to email")
+          
       }, (error) => {
           console.log(error.text);
-      });
+      }).finally(()=>{
+        setLoad(false)
+      })
     }catch(e){
       console.log(e)
     }

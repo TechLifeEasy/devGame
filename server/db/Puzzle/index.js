@@ -26,7 +26,7 @@ async function getRanDomQuiz(){
  
     const token = await jwt.sign(JSON.stringify(data.data[0].correct_answers), process.env.Secrete);
 
-    return { ...data.data[0], correct_answers2:data.data[0].correct_answers,correct_answers: token };
+    return { ...data.data[0],correct_answers: token };
 
 }
 

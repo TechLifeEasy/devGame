@@ -140,15 +140,15 @@ router.post("/update",async (req,res)=>{
         useFindAndModify:false
       }
       )
-    await UserModal.findOneAndUpdate(
-      {email},
-      {
+    // await UserModal.findOneAndUpdate(
+    //   {email},
+    //   {
       
-        $inc:{matches:1}
-      },{
-        useFindAndModify:false
-      }
-      )
+    //     $inc:{matches:1}
+    //   },{
+    //     useFindAndModify:false
+    //   }
+    //   )
     
     if(resp){
       res.status(200).send("Done Updating Score")

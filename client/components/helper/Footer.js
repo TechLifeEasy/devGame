@@ -42,7 +42,7 @@ export default function Footer() {
         <div className="flex gap-3 flex-wrap my-4 items-center justify-center">
           <User name="Zeel" img={"https://avatars.githubusercontent.com/u/69882648?s=400&u=e9526eba272dd4d85df2e56411b57b7ab94659d5&v=4"} link={"https://github.com/zeel-codder"}></User>
           <User name="Dhruvil" img={"/img/dhruvil.png"} link={"https://github.com/dhruvil-shah"}></User>
-          <User name="Barun" img={"/img/barun.png"} link={"https://github.com/d-cryptic"}></User>
+          {/* <User name="Barun" img={"/img/barun.png"} link={"https://github.com/d-cryptic"}></User> */}
         </div>
         <div className="text-center my-4">
           © 2022 DevGame™. All Rights Reserved
@@ -54,7 +54,7 @@ export default function Footer() {
 
 function User({name,img,link}) {
   return (
-    <div  className="shadow-lg rounded-2xl text-white bg-black dark:bg-gray-800 p-4 hover:bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out">
+    <div  className="shadow-lg rounded-2xl text-white bg-black   p-4 hover:bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out">
       <div  className="flex justify-center items-center">
         <div  className="flex-shrink-0">
           <a href={link} className="block relative" target="_blank">

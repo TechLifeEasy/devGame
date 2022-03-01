@@ -85,7 +85,36 @@ function Main(server) {
       io.to(data.room_id).emit("left",data);
     })
 
+    socket.on('getTotal',()=>{
+      socket.emit("total",map.size);
+    });
+
+    socket.on("SubAns",(data)=>{
+      io.to(data.room_id).emit("WantSub",data);
+    })
+    socket.on("NoSub",(data)=>{
+      io.to(data.room_id).emit("LetCheck",data);
+    })
+    socket.on("YesSub",(data)=>{
+      io.to(data.room_id).emit("NotCheck",data);
+    })
+
     socket.on("disconnect", () => {
+      map.delete(socket.id);
+      // console.log(queue)
+      let index=-1;
+      for(let i=0;i<queue.length;i++){
+        if(queue[i].socket_id==socket.id)
+        {
+          index = i;
+          break;
+        }
+      }
+      if(index!=-1)
+      {
+        queue.splice(index, 1);
+      }
+      // console.log(queue)
       io.emit("user-net-gaya",{id:socket.id})
     });
 

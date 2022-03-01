@@ -12,7 +12,7 @@ function User({ name, isMe }) {
   const [userAvt, setUrl] = useState(getUrl());
 
   return (
-    <div class=" relative shadow-lg rounded-2xl w-64  text-black  dark:bg-gray-800 p-4 bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out cursor-pointer">
+    <div class=" relative shadow-lg rounded-2xl w-64  text-black   p-4 bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out cursor-pointer">
       <>
         <img
           alt="profil"

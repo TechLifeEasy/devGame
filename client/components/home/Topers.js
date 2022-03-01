@@ -32,9 +32,9 @@ export default function Topers(){
       text-white">
       {/* <h1 className="  text-2xl">Dev Game</h1> */}
 
-      <h1 className="mb-4  text-2xl">Today Top Players</h1>
+      <h1 className="mb-4  text-2xl">Top Players</h1>
     
-     <div class=" flex  gap-6 mx-auto w-full items-center justify-center dark:bg-gray-800 rounded-lg shadow">
+     <div class=" flex  gap-6 mx-auto w-full items-center justify-center   rounded-lg shadow">
       
       {(all?data:top3).map((dt)=>{
         return(
@@ -44,8 +44,8 @@ export default function Topers(){
 
       <button
         className="border-x-2 border-yellow-500 py-3 w-full  overflow-hidden transform translate-y-0 hover:bg-yellow-500 hover:text-black duration-200 ease-in-out
-      bg-black text-yellow-500" onClick={()=>{setAll(!all)}} >
-        {all?<p>All</p>:<p>Top 3</p>}
+      bg-black text-yellow-500"  >
+        Top 3
       </button>
     </div>
   );
@@ -53,7 +53,7 @@ export default function Topers(){
 
 // function DayTopers() {
 //   return (
-//     <div class=" flex  gap-6 mx-auto w-full items-center justify-center  dark:bg-gray-800 rounded-lg shadow">
+//     <div class=" flex  gap-6 mx-auto w-full items-center justify-center    rounded-lg shadow">
 //       {data.map((dt)=>{
 //       <UserOne name={dt.name} rating={dt.rating}></UserOne>
 //       })}
@@ -64,7 +64,7 @@ export default function Topers(){
 function UserOne({name,rating}){
   const [user, setUrl] = useState(getUrl());
   return (
-    <div class=" relative shadow-lg rounded-2xl w-64  text-black  dark:bg-gray-800 p-4 bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out cursor-pointer">
+    <div class=" relative shadow-lg rounded-2xl w-64  text-black    p-4 bg-black hover:text-yellow-500 border-2 hover:border-yellow-500 hover:translate-y-2 duration-500 ease-in-out cursor-pointer">
       
         <>
           <img

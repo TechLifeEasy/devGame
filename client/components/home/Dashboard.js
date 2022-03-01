@@ -28,7 +28,7 @@ export default function Dashboard() {
 function Path() {
   return (
     <div class="sm:flex flex-wrap justify-center items-center text-center gap-8">
-      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4  text-white mt-6  shadow-lg rounded-lg dark:bg-gray-800 hover:translate-y-2 duration-500 ease-in-out">
+      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4  text-white mt-6  shadow-lg rounded-lg   hover:translate-y-2 duration-500 ease-in-out">
         <div class="flex-shrink-0">
           <div class="flex items-center mx-auto justify-center h-12 w-12 rounded-md bg-yellow-500 text-white">
             <svg
@@ -44,14 +44,13 @@ function Path() {
           </div>
         </div>
         <h3 class="text-2xl sm:text-xl   font-semibold dark:text-white py-4">
-          Website Design
+          Create The Account
         </h3>
         <p class="text-md     dark:text-gray-300 py-4">
-          Encompassing today’s website design technology to integrated and build
-          solutions relevant to your business.
+          we have sign up with email verification function in our app. you while get opt and than you can enter in the app.
         </p>
       </div>
-      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4 text-white mt-6 sm:mt-16 md:mt-20 lg:mt-24  shadow-lg rounded-lg dark:bg-gray-800 hover:translate-y-2 duration-500 ease-in-out">
+      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 px-4 py-4 text-white mt-6 sm:mt-16 md:mt-20 lg:mt-24  shadow-lg rounded-lg   hover:translate-y-2 duration-500 ease-in-out">
         <div class="flex-shrink-0">
           <div class="flex items-center mx-auto justify-center h-12 w-12 rounded-md bg-yellow-500 text-white">
             <svg
@@ -67,14 +66,13 @@ function Path() {
           </div>
         </div>
         <h3 class="text-2xl sm:text-xl   font-semibold dark:text-white py-4">
-          Branding
+          Find the Player
         </h3>
         <p class="text-md    dark:text-gray-300 py-4">
-          Share relevant, engaging, and inspirational brand messages to create a
-          connection with your audience.
+          Goto Play ground of app. than click on find and just wait onther user to connect. than ready for fun.
         </p>
       </div>
-      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mt-6  px-4 text-white py-4 shadow-lg rounded-lg dark:bg-gray-800 hover:translate-y-2 duration-500 ease-in-out">
+      <div class="w-full sm:w-1/2 md:w-1/2 lg:w-1/4 mt-6  px-4 text-white py-4 shadow-lg rounded-lg   hover:translate-y-2 duration-500 ease-in-out">
         <div class="flex-shrink-0">
           <div class="flex items-center mx-auto justify-center h-12 w-12 rounded-md bg-yellow-500 text-white">
             <svg
@@ -90,11 +88,10 @@ function Path() {
           </div>
         </div>
         <h3 class="text-2xl sm:text-xl   font-semibold dark:text-white py-4">
-          SEO Marketing
+          Game
         </h3>
         <p class="text-md     dark:text-gray-300 py-4">
-          Let us help you level up your search engine game, explore our
-          solutions for digital marketing for your business.
+          Game is Simple you and your patnere have to solve the basic mcq related cse and get the point.
         </p>
       </div>
     </div>

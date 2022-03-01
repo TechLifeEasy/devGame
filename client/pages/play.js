@@ -4,7 +4,7 @@ import { useEffect, useState, useReducer, useLayoutEffect } from "react";
 import { io } from "socket.io-client";
 import { BsInfo, BsWindowSidebar } from "react-icons/bs";
 import { incMatches } from "../Api/Api";
-
+// import Navbar from "../../components/helper/Navbar";
 // import Peer from 'peerjs';
 const PORT = process.env.NEXT_PUBLIC_WebLink;
 
@@ -81,8 +81,10 @@ export default function Home(props) {
       {/* <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script> */}
 
       {state.isFind ? (
-
-        <PreMatch find={init}></PreMatch>
+        <>
+        
+        <PreMatch find={init} socket={socket}></PreMatch>
+        </>
       ) : (
         <Index
           state={state}
