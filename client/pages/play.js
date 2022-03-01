@@ -5,6 +5,10 @@ import { io } from "socket.io-client";
 import { BsInfo, BsWindowSidebar } from "react-icons/bs";
 import { incMatches } from "../Api/Api";
 
+// import Peer from 'peerjs';
+const PORT = process.env.NEXT_PUBLIC_WebLink;
+
+
 const inits = {
   isFind: true,
   dataPartner: null,
@@ -45,27 +49,39 @@ export default function Home(props) {
     socket.on("join_me", (room_id, data, question) => {
       console.log(room_id);
 
-      incMatches({ email: data.email })
-        .then((resp) => {
-          console.log(resp);
-        })
-        .catch((e) => {
-          console.log(e);
-        });
-      window.localStorage.setItem("room_id", room_id);
-      // console.log(data);
-      dispatch({ type: "dataPartner", data: { ...data, room_id: room_id } });
-      dispatch({ type: "isFind", data: false });
-      dispatch({ type: "question", data: question });
-      // console.log("Donnaa");
-      socket.emit("join_room_id", room_id);
+
+      // var Peer2 = new Peer(room_id, {
+      //   path: "/peerjs",
+      //   host: "/",
+      //   port: "3030",
+      //   });
+      // console.log(Peer2)
+      // setPeer(Peer2);
+  
+    incMatches({email:data.email})
+    .then((resp)=>{
+      console.log(resp);
+    })
+    .catch((e)=>{
+      console.log(e);
+    })
+    window.localStorage.setItem("room_id", room_id);
+    dispatch({ type: "dataPartner", data: { ...data, room_id: room_id } });
+    console.log(data);
+    dispatch({ type: "isFind", data: false });
+    dispatch({ type: "question", data: question });
+    console.log("Donnaa");
+    socket.emit("join_room_id", room_id);
+
     });
   }
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-black text-white">
       {/* <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script> */}
-      {state.isFind  && state.question ? (
+
+      {state.isFind ? (
+
         <PreMatch find={init}></PreMatch>
       ) : (
         <Index

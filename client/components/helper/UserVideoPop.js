@@ -46,7 +46,7 @@ import {
           </div>
         
   
-        {isPlay && isMe && (
+        {/* {isPlay && isMe && (
           <div className="absolute flex gap-2 text-xl mt-3 bottom-3 left-1/2 -translate-x-1/2">
             <div
               // onClick={() => {
@@ -58,7 +58,7 @@ import {
               ) : (
                 <BsFillMicMuteFill></BsFillMicMuteFill>
               )} */}
-            </div>
+            {/* </div> */}
             {/* <div
               onClick={() => {
                 if (isVideo) {
@@ -75,8 +75,8 @@ import {
                 <BsFillCameraVideoOffFill></BsFillCameraVideoOffFill>
               )}
             </div> */}
-          </div>
-        )}
+          {/* // </div> */}
+        {/* // )} */} 
       </div>
     );
   }
