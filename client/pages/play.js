@@ -5,7 +5,7 @@ import { io } from "socket.io-client";
 import { BsInfo, BsWindowSidebar } from "react-icons/bs";
 import { incMatches } from "../Api/Api";
 // import Peer from 'peerjs';
-const PORT = "http://127.0.0.1:8080/";
+const PORT = process.env.NEXT_PUBLIC_WebLink;
 
 const inits = {
   isFind: true,
@@ -47,13 +47,13 @@ export default function Home(props) {
     socket.on("join_me", (room_id, data, question) => {
     console.log(room_id);
 
-      var Peer2 = new Peer(room_id, {
-        path: "/peerjs",
-        host: "/",
-        port: "3030",
-        });
-      console.log(Peer2)
-      setPeer(Peer2);
+      // var Peer2 = new Peer(room_id, {
+      //   path: "/peerjs",
+      //   host: "/",
+      //   port: "3030",
+      //   });
+      // console.log(Peer2)
+      // setPeer(Peer2);
   
     incMatches({email:data.email})
     .then((resp)=>{
@@ -78,7 +78,7 @@ export default function Home(props) {
 
   return (
     <div className="w-full h-screen flex items-center justify-center bg-black text-white">
-      <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script>
+      {/* <script src="https://unpkg.com/peerjs@1.3.1/dist/peerjs.min.js"></script> */}
       {state.isFind ? (
         <PreMatch find={init}></PreMatch>
       ) : (

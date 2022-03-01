@@ -5,31 +5,27 @@ import { AiOutlineSend } from "react-icons/ai";
 export default function Chat(props) {
   const [msg, setMsg] = useState("");
   const [list,setList] =useState([])
-
-  useEffect(()=>{
-
-    props.socket.on('message_other',(data)=>{
-      let user=window.localStorage.getItem('info');
-      user=JSON.parse(user)
-      if(window.localStorage.getItem("room_id")!==data.room_id)
-      return;
-      console.log("mailu k nai");
-      if(data.name!=user.name){
-        setList([...list,{name:data.name,message:data.message}])
-      }
-    })
-
-  },[])
-
-
-
-  const sendMsg=()=>{
+  
+  props.socket.on('message_other',(data)=>{
     let user=window.localStorage.getItem('info');
     user=JSON.parse(user)
+    if(window.localStorage.getItem("room_id")!==data.room_id)
+    return;
+    console.log("mailu k nai");
+    if(data.name!=user.name){
+      setList([...list,{name:data.name,message:data.message}])
+    }
+  })
+
+  
+  const sendMsg=()=>{
+    if(msg.length==0) return;
+    let user=window.localStorage.getItem('info');
+    user=JSON.parse(user)
+    setList([...list,{name:"You",message:msg}])
     let room_id=props.dataPartner.room_id;
     // console.log(user);
     props.socket.emit("mess",{name:user.name,message:msg,room_id});
-    setList([...list,{name:"You",message:msg}])
     setMsg("")
   }
   return (
