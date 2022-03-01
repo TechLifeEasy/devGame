@@ -4,7 +4,7 @@ Above described repo basically consist of a attractive game made for developers 
 # TECH-STACK USED:
 ## Front-end:
     Next.js
-    React.js
+    React.js 
     Tailwind CSS
 ## Back-end:
     Node.js
